@@ -11,4 +11,7 @@ add_executable(202400111_EDD_Practica main.cpp
         Fila.h
         Pila.h
         ListaCircularDoble.h
-        NodoDoble.h)
+        NodoDoble.h
+        avion.h
+        Pasajero.h
+        NodoSimple.h)

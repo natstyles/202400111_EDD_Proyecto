@@ -1,41 +1,26 @@
 #ifndef NODODOBLE_H
 #define NODODOBLE_H
 
+template <typename T>
 class NodoDoble {
 private:
-    int dato;
+    T dato;
     NodoDoble *siguiente;
     NodoDoble *anterior;
 
 public:
-    // Constructor
-    NodoDoble(int dato) {
+    NodoDoble(T dato) {
         this->dato = dato;
-        this->siguiente = nullptr;
-        this->anterior = nullptr;
+        siguiente = nullptr;
+        anterior = nullptr;
     }
 
-    // Getters
-    int getDato() {
-        return dato;
-    }
+    T getDato() { return dato; }
+    NodoDoble* getSiguiente() { return siguiente; }
+    NodoDoble* getAnterior() { return anterior; }
 
-    NodoDoble* getSiguiente() {
-        return siguiente;
-    }
-
-    NodoDoble* getAnterior() {
-        return anterior;
-    }
-
-    // Setters
-    void setSiguiente(NodoDoble *sig) {
-        siguiente = sig;
-    }
-
-    void setAnterior(NodoDoble *ant) {
-        anterior = ant;
-    }
+    void setSiguiente(NodoDoble *sig) { siguiente = sig; }
+    void setAnterior(NodoDoble *ant) { anterior = ant; }
 };
 
 #endif
