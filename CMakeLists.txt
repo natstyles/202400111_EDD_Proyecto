@@ -16,4 +16,5 @@ add_executable(202400111_EDD_Practica main.cpp
         CargadorAviones.h
         CargadorPasajeros.h
         CargadorCambios.h
-        Utilidades.h)
+        Utilidades.h
+        Graphviz.h)

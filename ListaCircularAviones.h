@@ -2,6 +2,9 @@
 #define LISTACIRCULARAVIONES_H
 
 #include <iostream>
+#include "Graphviz.h"
+#include <fstream>
+
 using namespace std;
 
 #include "NodoDoble.h"
@@ -56,6 +59,38 @@ public:
         } while (actual != primero);
 
         cout << endl;
+    }
+
+    //generar reportes
+    void generarReporte(string nombre) {
+        ofstream archivo(nombre + ".dot");
+
+        archivo << "digraph G {\n";
+        archivo << "rankdir=LR;\n";
+        archivo << "node [shape=box];\n";
+
+        if (!estaVacia()) {
+            NodoDoble<Avion>* actual = primero;
+
+            do {
+                archivo << "\"" << actual->getDato().getRegistro()
+                        << "\\n" << actual->getDato().getEstado() << "\";\n";
+
+                archivo << "\"" << actual->getDato().getRegistro()
+                        << "\\n" << actual->getDato().getEstado() << "\" -> \""
+                        << actual->getSiguiente()->getDato().getRegistro()
+                        << "\\n" << actual->getSiguiente()->getDato().getEstado()
+                        << "\";\n";
+
+                actual = actual->getSiguiente();
+
+            } while (actual != primero);
+        }
+
+        archivo << "}\n";
+        archivo.close();
+
+        generarImagen(nombre + ".dot", nombre + ".png");
     }
 };
 

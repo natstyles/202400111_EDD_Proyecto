@@ -65,7 +65,13 @@ int main() {
 
             case 5:
                 cout << "Mostrando reportes...\n";
-                // 🟡 Aquí luego generamos los DOT + PNG de Graphviz
+
+                disponibles.generarReporte("aviones_disponibles");
+                mantenimiento.generarReporte("aviones_mantenimiento");
+                cola.generarReporte("cola_pasajeros");
+                pila.generarReporte("pila_equipaje");
+                listaPasajeros.generarReporte("lista_pasajeros");
+
                 break;
 
             case 6:

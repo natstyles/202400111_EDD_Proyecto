@@ -48,6 +48,27 @@ public:
             actual = actual->getSiguiente();
         }
     }
+
+    void generarReporte(string nombre) {
+        ofstream archivo(nombre + ".dot");
+        archivo << "digraph G {\n";
+        archivo << "rankdir=TB;\n";
+        archivo << "node [shape=box];\n";
+
+        NodoSimple<int>* actual = tope;
+
+        while (actual != nullptr && actual->getSiguiente() != nullptr) {
+            archivo << "\"" << actual->getDato() << "\" -> \""
+                    << actual->getSiguiente()->getDato() << "\";\n";
+            actual = actual->getSiguiente();
+        }
+
+        archivo << "}\n";
+        archivo.close();
+
+        generarImagen(nombre + ".dot", nombre + ".png");
+    }
+
 };
 
 #endif

@@ -2,6 +2,9 @@
 #define COLAPASAJEROS_H
 
 #include <iostream>
+#include "Graphviz.h"
+#include <fstream>
+
 using namespace std;
 
 #include "NodoSimple.h"
@@ -59,6 +62,35 @@ public:
         }
         cout << endl;
     }
+
+    //reporte
+    void generarReporte(string nombre) {
+        ofstream archivo(nombre + ".dot");
+        archivo << "digraph G {\n";
+        archivo << "rankdir=LR;\n";
+        archivo << "node [shape=box];\n";
+
+        NodoSimple<Pasajero>* actual = frente;
+
+        while (actual != nullptr) {
+            archivo << "\"" << actual->getDato().getPasaporte() << "\";\n";
+
+            if (actual->getSiguiente() != nullptr) {
+                archivo << "\"" << actual->getDato().getPasaporte()
+                        << "\" -> \""
+                        << actual->getSiguiente()->getDato().getPasaporte()
+                        << "\";\n";
+            }
+
+            actual = actual->getSiguiente();
+        }
+
+        archivo << "}\n";
+        archivo.close();
+
+        generarImagen(nombre + ".dot", nombre + ".png");
+    }
+
 };
 
 #endif

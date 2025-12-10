@@ -96,6 +96,33 @@ public:
 
         cout << "Pasajero no encontrado.\n";
     }
+
+    void generarReporte(string nombre) {
+        ofstream archivo(nombre + ".dot");
+
+        archivo << "digraph G {\n";
+        archivo << "rankdir=LR;\n";
+        archivo << "node [shape=box];\n";
+
+        NodoDoble<Pasajero>* actual = primero;
+
+        while (actual != nullptr && actual->getSiguiente() != nullptr) {
+
+            archivo << "\"" << actual->getDato().getPasaporte() << "\" -> \""
+                    << actual->getSiguiente()->getDato().getPasaporte() << "\";\n";
+
+            archivo << "\"" << actual->getSiguiente()->getDato().getPasaporte()
+                    << "\" -> \""
+                    << actual->getDato().getPasaporte() << "\";\n";
+
+            actual = actual->getSiguiente();
+        }
+
+        archivo << "}\n";
+        archivo.close();
+
+        generarImagen(nombre + ".dot", nombre + ".png");
+    }
 };
 
 #endif
