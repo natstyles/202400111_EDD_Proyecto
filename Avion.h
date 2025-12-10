@@ -6,31 +6,42 @@ using namespace std;
 
 class Avion {
 private:
+    string vuelo;
     string registro;
     string modelo;
+    string fabricante;
+    int ano;
     int capacidad;
-    string estado; //puede estar en mantenimiento o disponible
+    int peso;
+    string aerolinea;
+    string estado;
 
 public:
     Avion() {}
 
-    Avion(string registro, string modelo, int capacidad, string estado) {
+    Avion(string vuelo, string registro, string modelo, string fabricante,
+          int ano, int capacidad, int peso, string aerolinea, string estado) {
+        this->vuelo = vuelo;
         this->registro = registro;
         this->modelo = modelo;
+        this->fabricante = fabricante;
+        this->ano = ano;
         this->capacidad = capacidad;
+        this->peso = peso;
+        this->aerolinea = aerolinea;
         this->estado = estado;
     }
 
-    //GET
+    string getVuelo() { return vuelo; }
     string getRegistro() { return registro; }
     string getModelo() { return modelo; }
+    string getFabricante() { return fabricante; }
+    int getAno() { return ano; }
     int getCapacidad() { return capacidad; }
+    int getPeso() { return peso; }
+    string getAerolinea() { return aerolinea; }
     string getEstado() { return estado; }
 
-    //SET
-    void setRegistro(string r) { registro = r; }
-    void setModelo(string m) { modelo = m; }
-    void setCapacidad(int c) { capacidad = c; }
     void setEstado(string e) { estado = e; }
 };
 

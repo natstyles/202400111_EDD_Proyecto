@@ -68,6 +68,34 @@ public:
             actual = actual->getSiguiente();
         }
     }
+
+    //consultamos pasajeros por pasaporte
+    void consultar(string pasaporte) {
+        if (primero == nullptr) {
+            cout << "No hay pasajeros atendidos.\n";
+            return;
+        }
+
+        NodoDoble<Pasajero> *actual = primero;
+
+        while (actual != nullptr) {
+            if (actual->getDato().getPasaporte() == pasaporte) {
+                Pasajero p = actual->getDato();
+
+                cout << "\n--- PASAJERO ENCONTRADO ---\n";
+                cout << "Nombre: " << p.getNombre() << endl;
+                cout << "Pasaporte: " << p.getPasaporte() << endl;
+                cout << "Vuelo: " << p.getVuelo() << endl;
+                cout << "Asiento: " << p.getAsiento() << endl;
+                cout << "Equipaje: " << p.getEquipaje() << endl;
+                return;
+            }
+
+            actual = actual->getSiguiente();
+        }
+
+        cout << "Pasajero no encontrado.\n";
+    }
 };
 
 #endif

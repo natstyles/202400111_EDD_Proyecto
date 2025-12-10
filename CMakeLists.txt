@@ -12,4 +12,8 @@ add_executable(202400111_EDD_Practica main.cpp
         ColaPasajeros.h
         PilaEquipaje.h
         ListaCircularAviones.h
-        ListaDoblePasajeros.h)
+        ListaDoblePasajeros.h
+        CargadorAviones.h
+        CargadorPasajeros.h
+        CargadorCambios.h
+        Utilidades.h)
