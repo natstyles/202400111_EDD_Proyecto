@@ -62,28 +62,43 @@ public:
     }
 
     //generar reportes
-    void generarReporte(string nombre) {
+    void generarReporte(string nombre, string titulo) {
         ofstream archivo(nombre + ".dot");
 
         archivo << "digraph G {\n";
         archivo << "rankdir=LR;\n";
-        archivo << "node [shape=box];\n";
+
+        // Título grande arriba
+        archivo << "labelloc=\"t\";\n";
+        archivo << "label=\"" << titulo << "\";\n";
+        archivo << "fontsize=20;\n";
+
+        archivo << "node [shape=box, fontname=\"Arial\"];\n";
 
         if (!estaVacia()) {
             NodoDoble<Avion>* actual = primero;
 
             do {
-                archivo << "\"" << actual->getDato().getRegistro()
-                        << "\\n" << actual->getDato().getEstado() << "\";\n";
+                Avion a = actual->getDato();
 
-                archivo << "\"" << actual->getDato().getRegistro()
-                        << "\\n" << actual->getDato().getEstado() << "\" -> \""
-                        << actual->getSiguiente()->getDato().getRegistro()
-                        << "\\n" << actual->getSiguiente()->getDato().getEstado()
-                        << "\";\n";
+                // Etiqueta simple: Registro, modelo, estado
+                string etiqueta =
+                    "Registro: " + a.getRegistro() + "\\n" +
+                    "Modelo: " + a.getModelo() + "\\n" +
+                    "Estado: " + a.getEstado();
+
+                archivo << "\"" << etiqueta << "\";\n";
+
+                // Conexión circular
+                Avion sig = actual->getSiguiente()->getDato();
+                string etiqueta2 =
+                    "Registro: " + sig.getRegistro() + "\\n" +
+                    "Modelo: " + sig.getModelo() + "\\n" +
+                    "Estado: " + sig.getEstado();
+
+                archivo << "\"" << etiqueta << "\" -> \"" << etiqueta2 << "\";\n";
 
                 actual = actual->getSiguiente();
-
             } while (actual != primero);
         }
 
@@ -92,6 +107,7 @@ public:
 
         generarImagen(nombre + ".dot", nombre + ".png");
     }
+
 };
 
 #endif

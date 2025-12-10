@@ -61,9 +61,10 @@ public:
         NodoDoble<Pasajero> *actual = primero;
 
         while (actual != nullptr) {
-            cout << actual->getDato().getNombre()
+            cout << actual->getDato().getNombre() << " (Pasaporte: " << actual->getDato().getPasaporte() << ")"
                  << " | Vuelo: " << actual->getDato().getVuelo()
                  << " | Asiento: " << actual->getDato().getAsiento()
+                 << " | Cant. Equipaje: " << actual->getDato().getEquipaje()
                  << endl;
             actual = actual->getSiguiente();
         }
@@ -97,23 +98,40 @@ public:
         cout << "Pasajero no encontrado.\n";
     }
 
-    void generarReporte(string nombre) {
+    //reporte graphviz
+    void generarReporte(string nombre, string titulo) {
         ofstream archivo(nombre + ".dot");
 
         archivo << "digraph G {\n";
         archivo << "rankdir=LR;\n";
-        archivo << "node [shape=box];\n";
+
+        archivo << "labelloc=\"t\";\n";
+        archivo << "label=\"" << titulo << "\";\n";
+        archivo << "fontsize=20;\n";
+
+        archivo << "node [shape=box, fontname=\"Arial\"];\n";
 
         NodoDoble<Pasajero>* actual = primero;
 
-        while (actual != nullptr && actual->getSiguiente() != nullptr) {
+        while (actual != nullptr) {
 
-            archivo << "\"" << actual->getDato().getPasaporte() << "\" -> \""
-                    << actual->getSiguiente()->getDato().getPasaporte() << "\";\n";
+            Pasajero p = actual->getDato();
 
-            archivo << "\"" << actual->getSiguiente()->getDato().getPasaporte()
-                    << "\" -> \""
-                    << actual->getDato().getPasaporte() << "\";\n";
+            string etiqueta =
+                "Nombre: " + p.getNombre() + "\\n" +
+                "Pasaporte: " + p.getPasaporte();
+
+            archivo << "\"" << etiqueta << "\";\n";
+
+            if (actual->getSiguiente() != nullptr) {
+                Pasajero ps = actual->getSiguiente()->getDato();
+                string etiqueta2 =
+                    "Nombre: " + ps.getNombre() + "\\n" +
+                    "Pasaporte: " + ps.getPasaporte();
+
+                archivo << "\"" << etiqueta << "\" -> \"" << etiqueta2 << "\";\n";
+                archivo << "\"" << etiqueta2 << "\" -> \"" << etiqueta << "\";\n";
+            }
 
             actual = actual->getSiguiente();
         }

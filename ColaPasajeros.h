@@ -57,29 +57,43 @@ public:
         NodoSimple<Pasajero> *actual = frente;
 
         while (actual != nullptr) {
-            cout << actual->getDato().getNombre() << " -> ";
+            cout << actual->getDato().getNombre() << " (Pasaporte: " << actual->getDato().getPasaporte() << ")" << " -> ";
             actual = actual->getSiguiente();
         }
         cout << endl;
     }
 
     //reporte
-    void generarReporte(string nombre) {
+    void generarReporte(string nombre, string titulo) {
         ofstream archivo(nombre + ".dot");
+
         archivo << "digraph G {\n";
         archivo << "rankdir=LR;\n";
-        archivo << "node [shape=box];\n";
+
+        archivo << "labelloc=\"t\";\n";
+        archivo << "label=\"" << titulo << "\";\n";
+        archivo << "fontsize=20;\n";
+
+        archivo << "node [shape=box, fontname=\"Arial\"];\n";
 
         NodoSimple<Pasajero>* actual = frente;
 
         while (actual != nullptr) {
-            archivo << "\"" << actual->getDato().getPasaporte() << "\";\n";
+            Pasajero p = actual->getDato();
+
+            string etiqueta =
+                "Nombre: " + p.getNombre() + "\\n" +
+                "Pasaporte: " + p.getPasaporte();
+
+            archivo << "\"" << etiqueta << "\";\n";
 
             if (actual->getSiguiente() != nullptr) {
-                archivo << "\"" << actual->getDato().getPasaporte()
-                        << "\" -> \""
-                        << actual->getSiguiente()->getDato().getPasaporte()
-                        << "\";\n";
+                Pasajero s = actual->getSiguiente()->getDato();
+                string etiqueta2 =
+                    "Nombre: " + s.getNombre() + "\\n" +
+                    "Pasaporte: " + s.getPasaporte();
+
+                archivo << "\"" << etiqueta << "\" -> \"" << etiqueta2 << "\";\n";
             }
 
             actual = actual->getSiguiente();
@@ -90,7 +104,6 @@ public:
 
         generarImagen(nombre + ".dot", nombre + ".png");
     }
-
 };
 
 #endif

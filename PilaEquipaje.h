@@ -49,17 +49,30 @@ public:
         }
     }
 
-    void generarReporte(string nombre) {
+    //generación de reporte graphviz
+    void generarReporte(string nombre, string titulo) {
         ofstream archivo(nombre + ".dot");
+
         archivo << "digraph G {\n";
         archivo << "rankdir=TB;\n";
-        archivo << "node [shape=box];\n";
+
+        archivo << "labelloc=\"t\";\n";
+        archivo << "label=\"" << titulo << "\";\n";
+        archivo << "fontsize=20;\n";
+
+        archivo << "node [shape=box, fontname=\"Arial\"];\n";
 
         NodoSimple<int>* actual = tope;
 
-        while (actual != nullptr && actual->getSiguiente() != nullptr) {
-            archivo << "\"" << actual->getDato() << "\" -> \""
-                    << actual->getSiguiente()->getDato() << "\";\n";
+        while (actual != nullptr) {
+            archivo << "\"" << actual->getDato() << "\"";
+
+            if (actual->getSiguiente() != nullptr) {
+                archivo << " -> \"" << actual->getSiguiente()->getDato() << "\";\n";
+            } else {
+                archivo << ";\n";
+            }
+
             actual = actual->getSiguiente();
         }
 
@@ -68,7 +81,6 @@ public:
 
         generarImagen(nombre + ".dot", nombre + ".png");
     }
-
 };
 
 #endif

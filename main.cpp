@@ -14,15 +14,28 @@ using namespace std;
 
 
 void menu() {
-    cout << "\n----- Gestión de aeropuerto -----\n";
+    cout << "\n----- Gestion de aeropuerto -----\n";
     cout << "1. Carga de aviones\n";
     cout << "2. Carga de pasajeros\n";
     cout << "3. Carga de movimientos\n";
     cout << "4. Consultar pasajero\n";
     cout << "5. Visualizar reportes\n";
-    cout << "6. Salir\n";
+    cout << "6. Visualizar estructuras\n";
+    cout << "7. Salir\n";
     cout << "Seleccione una opcion: ";
 }
+
+//ver listas de pasajeros, aviones y maletas en consola!
+void menuVisualizacion() {
+    cout << "\n----- Menu de vistas -----\n";
+    cout << "1. Mostrar cola de pasajeros\n";
+    cout << "2. Mostrar pasajeros atendidos\n";
+    cout << "3. Mostrar aviones disponibles\n";
+    cout << "4. Mostrar aviones en mantenimiento\n";
+    cout << "5. Regresar al menu principal\n";
+    cout << "Seleccione una opcion: ";
+}
+
 
 int main() {
 
@@ -64,17 +77,54 @@ int main() {
             }
 
             case 5:
-                cout << "Mostrando reportes...\n";
-
-                disponibles.generarReporte("aviones_disponibles");
-                mantenimiento.generarReporte("aviones_mantenimiento");
-                cola.generarReporte("cola_pasajeros");
-                pila.generarReporte("pila_equipaje");
-                listaPasajeros.generarReporte("lista_pasajeros");
-
+                disponibles.generarReporte("aviones_disponibles", "Aviones Disponibles");
+                mantenimiento.generarReporte("aviones_mantenimiento", "Aviones en Mantenimiento");
+                cola.generarReporte("cola_pasajeros", "Cola de Pasajeros Registrados");
+                pila.generarReporte("pila_equipaje", "Pila de Equipaje Facturado");
+                listaPasajeros.generarReporte("lista_pasajeros", "Pasajeros Atendidos");
                 break;
 
-            case 6:
+            case 6: {
+                int op2;
+                do {
+                    menuVisualizacion();
+                    cin >> op2;
+
+                    switch (op2) {
+                        case 1:
+                            cout << "\n--- Cola de pasajeros ---\n";
+                            cola.mostrar();
+                            break;
+
+                        case 2:
+                            cout << "\n--- Pasajeros atendidos ---\n";
+                            listaPasajeros.mostrar();
+                            break;
+
+                        case 3:
+                            cout << "\n--- Aviones disponibles ---\n";
+                            disponibles.mostrar();
+                            break;
+
+                        case 4:
+                            cout << "\n--- Aviones en mantenimientos ---\n";
+                            mantenimiento.mostrar();
+                            break;
+
+                        case 5:
+                            cout << "Regresando al menu principal...\n";
+                            break;
+
+                        default:
+                            cout << "Opcion invalida, intenta de nuevo.\n";
+                    }
+
+                } while (op2 != 5);
+
+                break;
+            }
+
+            case 7:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -82,7 +132,7 @@ int main() {
                 cout << "Opcion invalida, intenta de nuevo!\n";
         }
 
-    } while (opcion != 6);
+    } while (opcion != 7);
 
     return 0;
 }
