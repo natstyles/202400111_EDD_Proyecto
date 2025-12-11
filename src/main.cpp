@@ -49,7 +49,12 @@ int main() {
 
     do {
         menu();
-        cin >> opcion;
+        if (!(cin >> opcion)) {
+            cin.clear();            //limpiamos el estado de error
+            cin.ignore(1000, '\n'); //limpia buffer
+            opcion = -1;            //pondrá opción inválida obligatoria
+        }
+
 
         switch (opcion) {
 
