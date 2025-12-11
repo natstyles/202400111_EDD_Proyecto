@@ -2,13 +2,13 @@
 #define COLAPASAJEROS_H
 
 #include <iostream>
-#include "Graphviz.h"
+#include "../utils/Graphviz.h"
 #include <fstream>
 
 using namespace std;
 
 #include "NodoSimple.h"
-#include "Pasajero.h"
+#include "../modelos/Pasajero.h"
 
 class ColaPasajeros {
 private:

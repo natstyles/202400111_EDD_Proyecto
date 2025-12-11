@@ -3,18 +3,17 @@ project(202400111_EDD_Practica)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(202400111_EDD_Practica main.cpp
-        ListaSimple.h
-        NodoDoble.h
-        avion.h
-        Pasajero.h
-        NodoSimple.h
-        ColaPasajeros.h
-        PilaEquipaje.h
-        ListaCircularAviones.h
-        ListaDoblePasajeros.h
-        CargadorAviones.h
-        CargadorPasajeros.h
-        CargadorCambios.h
-        Utilidades.h
-        Graphviz.h)
+add_executable(202400111_EDD_Practica src/main.cpp
+        src/estructuras/NodoDoble.h
+        src/modelos/Avion.h
+        src/modelos/Pasajero.h
+        src/estructuras/NodoSimple.h
+        src/estructuras/ColaPasajeros.h
+        src/estructuras/PilaEquipaje.h
+        src/estructuras/ListaCircularAviones.h
+        src/estructuras/ListaDoblePasajeros.h
+        src/cargadores/CargadorAviones.h
+        src/cargadores/CargadorPasajeros.h
+        src/cargadores/CargadorCambios.h
+        src/utils/Utilidades.h
+        src/utils/Graphviz.h)

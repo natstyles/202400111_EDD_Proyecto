@@ -4,8 +4,8 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "ColaPasajeros.h"
-#include "Utilidades.h"
+#include "../estructuras/ColaPasajeros.h"
+#include "../utils/Utilidades.h"
 
 
 using namespace std;

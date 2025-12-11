@@ -2,13 +2,13 @@
 #define LISTACIRCULARAVIONES_H
 
 #include <iostream>
-#include "Graphviz.h"
+#include "../utils/Graphviz.h"
 #include <fstream>
 
 using namespace std;
 
 #include "NodoDoble.h"
-#include "Avion.h"
+#include "../modelos/Avion.h"
 
 class ListaCircularAviones {
 private:
@@ -59,6 +59,92 @@ public:
         } while (actual != primero);
 
         cout << endl;
+    }
+
+    Avion obtenerPrimero() {
+        return primero->getDato();
+    }
+
+    //mover aviones entre listas
+    void eliminarPorRegistro(string registro) {
+        if (estaVacia()) return;
+
+        NodoDoble<Avion>* actual = primero;
+
+        do {
+            if (actual->getDato().getRegistro() == registro) {
+
+                // Si solo hay un nodo
+                if (primero == ultimo && actual == primero) {
+                    delete actual;
+                    primero = ultimo = nullptr;
+                    return;
+                }
+
+                // Si hay más de uno
+                actual->getAnterior()->setSiguiente(actual->getSiguiente());
+                actual->getSiguiente()->setAnterior(actual->getAnterior());
+
+                if (actual == primero)
+                    primero = actual->getSiguiente();
+
+                if (actual == ultimo)
+                    ultimo = actual->getAnterior();
+
+                delete actual;
+                return;
+            }
+
+            actual = actual->getSiguiente();
+        } while (actual != primero);
+    }
+
+    //enviar a mantenimiento
+    bool buscarYEnviarAMantenimiento(string registro, ListaCircularAviones &mantenimiento) {
+        if (estaVacia()) return false;
+
+        NodoDoble<Avion>* actual = primero;
+
+        do {
+            if (actual->getDato().getRegistro() == registro) {
+
+                Avion a = actual->getDato();
+                a.setEstado("Mantenimiento");
+
+                eliminarPorRegistro(registro);
+                mantenimiento.insertar(a);
+
+                return true;
+            }
+
+            actual = actual->getSiguiente();
+        } while (actual != primero);
+
+        return false;
+    }
+
+    //mover a disponibles
+    bool buscarYEnviarADisponibles(string registro, ListaCircularAviones &disponibles) {
+        if (estaVacia()) return false;
+
+        NodoDoble<Avion>* actual = primero;
+
+        do {
+            if (actual->getDato().getRegistro() == registro) {
+
+                Avion a = actual->getDato();
+                a.setEstado("Disponible");
+
+                eliminarPorRegistro(registro);
+                disponibles.insertar(a);
+
+                return true;
+            }
+
+            actual = actual->getSiguiente();
+        } while (actual != primero);
+
+        return false;
     }
 
     //generar reportes

@@ -5,7 +5,7 @@
 using namespace std;
 
 #include "NodoDoble.h"
-#include "Pasajero.h"
+#include "../modelos/Pasajero.h"
 
 class ListaDoblePasajeros {
 private:

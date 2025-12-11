@@ -4,8 +4,8 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "ListaCircularAviones.h"
-#include "Utilidades.h"
+#include "../estructuras/ListaCircularAviones.h"
+#include "../utils/Utilidades.h"
 
 
 using namespace std;

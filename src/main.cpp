@@ -2,16 +2,13 @@
 using namespace std;
 
 //includes
-#include "Avion.h"
-#include "Pasajero.h"
-#include "ColaPasajeros.h"
-#include "PilaEquipaje.h"
-#include "ListaCircularAviones.h"
-#include "ListaDoblePasajeros.h"
-#include "CargadorAviones.h"
-#include "CargadorPasajeros.h"
-#include "CargadorCambios.h"
-
+#include "estructuras/ColaPasajeros.h"
+#include "estructuras/PilaEquipaje.h"
+#include "estructuras/ListaCircularAviones.h"
+#include "estructuras/ListaDoblePasajeros.h"
+#include "cargadores/CargadorAviones.h"
+#include "cargadores/CargadorPasajeros.h"
+#include "cargadores/CargadorCambios.h"
 
 void menu() {
     cout << "\n----- Gestion de aeropuerto -----\n";
@@ -21,9 +18,12 @@ void menu() {
     cout << "4. Consultar pasajero\n";
     cout << "5. Visualizar reportes\n";
     cout << "6. Visualizar estructuras\n";
-    cout << "7. Salir\n";
+    cout << "7. Asignar pasajero a avion\n";
+    cout << "8. Cambiar estado de avion\n";
+    cout << "9. Salir\n";
     cout << "Seleccione una opcion: ";
 }
+
 
 //ver listas de pasajeros, aviones y maletas en consola!
 void menuVisualizacion() {
@@ -124,7 +124,54 @@ int main() {
                 break;
             }
 
-            case 7:
+            case 7: {
+                if (cola.estaVacia()) {
+                    cout << "No hay pasajeros en la cola.\n";
+                    break;
+                }
+
+                if (disponibles.estaVacia()) {
+                    cout << "No hay aviones disponibles.\n";
+                    break;
+                }
+
+                Pasajero p = cola.desencolar();
+                Avion a = disponibles.obtenerPrimero();   // solo referencia
+
+                cout << "\nAsignando pasajero al avion...\n";
+                cout << "Pasajero: " << p.getNombre() << endl;
+                cout << "Pasaporte: " << p.getPasaporte() << endl;
+                cout << "Avion: " << a.getRegistro() << endl;
+
+                listaPasajeros.insertarOrdenado(p);
+
+                if (p.getEquipaje() > 0) {
+                    pila.push(p.getEquipaje());
+                }
+
+                cout << "Pasajero asignado correctamente.\n";
+                break;
+            }
+
+            case 8: {
+                string registro;
+                cout << "Ingrese el registro del avion: ";
+                cin >> registro;
+
+                if (disponibles.buscarYEnviarAMantenimiento(registro, mantenimiento)) {
+                    cout << "Avion enviado a mantenimiento.\n";
+                }
+                else if (mantenimiento.buscarYEnviarADisponibles(registro, disponibles)) {
+                    cout << "Avion enviado a disponibles.\n";
+                }
+                else {
+                    cout << "Avion no encontrado.\n";
+                }
+
+                break;
+            }
+
+            case 9:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -132,7 +179,7 @@ int main() {
                 cout << "Opcion invalida, intenta de nuevo!\n";
         }
 
-    } while (opcion != 7);
+    } while (opcion != 9);
 
     return 0;
 }
