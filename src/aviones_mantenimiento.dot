@@ -1,11 +1,15 @@
 digraph G {
 rankdir=LR;
 labelloc="t";
-label="Aviones en Mantenimiento (2)";
+label="Aviones en Mantenimiento (4)";
 fontsize=20;
 node [shape=box, fontname="Arial"];
 n0 [label="Registro: N13579\nModelo: Boeing 777\nEstado: Mantenimiento"];
-n1 [label="Registro: N24680\nModelo: Airbus A380\nEstado: Mantenimiento"];
+n1 [label="Registro: N12345\nModelo: Boeing 737\nEstado: Mantenimiento"];
+n2 [label="Registro: N54321\nModelo: Airbus A320\nEstado: Mantenimiento"];
+n3 [label="Registro: N67890\nModelo: Boeing 787\nEstado: Mantenimiento"];
 n0 -> n1 [dir=both];
-n1 -> n0 [dir=both];
+n1 -> n2 [dir=both];
+n2 -> n3 [dir=both];
+n3 -> n0 [dir=both];
 }

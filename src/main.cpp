@@ -53,7 +53,6 @@ int main() {
             opcion = -1;            //pondrá opción inválida obligatoria
         }
 
-
         switch (opcion) {
 
             case 1:
@@ -67,7 +66,14 @@ int main() {
                 break;
 
             case 3:
-                procesarCambios("Cambios.txt", cola, listaPasajeros, pila);
+                procesarCambios(
+                    "Cambios.txt",
+                    cola,
+                    listaPasajeros,
+                    pila,
+                    disponibles,
+                    mantenimiento
+                );
                 cout << "Movimientos procesados correctamente.\n";
                 break;
 
