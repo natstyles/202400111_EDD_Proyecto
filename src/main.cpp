@@ -24,8 +24,7 @@ void menu() {
     cout << "Seleccione una opcion: ";
 }
 
-
-//ver listas de pasajeros, aviones y maletas en consola!
+//ver listas de pasajeros, aviones y maletas en consola
 void menuVisualizacion() {
     cout << "\n----- Menu de vistas -----\n";
     cout << "1. Mostrar cola de pasajeros\n";
@@ -35,7 +34,6 @@ void menuVisualizacion() {
     cout << "5. Regresar al menu principal\n";
     cout << "Seleccione una opcion: ";
 }
-
 
 int main() {
 
@@ -151,7 +149,7 @@ int main() {
                 listaPasajeros.insertarOrdenado(p);
 
                 if (p.getEquipaje() > 0) {
-                    pila.push(p.getEquipaje());
+                    pila.push(p.getPasaporte(), p.getEquipaje());
                 }
 
                 cout << "Pasajero asignado correctamente.\n";

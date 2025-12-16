@@ -32,7 +32,7 @@ void procesarCambios(string ruta,
                 lista.insertarOrdenado(p);
 
                 if (p.getEquipaje() > 0)
-                    pila.push(p.getEquipaje());
+                    pila.push(p.getPasaporte(), p.getEquipaje());
 
                 contador++;
             }

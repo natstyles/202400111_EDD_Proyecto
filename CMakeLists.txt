@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 4.0)
-project(202400111_EDD_Practica)
+project(202400111_EDD_Proyecto)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(202400111_EDD_Practica src/main.cpp
+add_executable(202400111_EDD_Proyecto src/main.cpp
         src/estructuras/NodoDoble.h
         src/modelos/Avion.h
         src/modelos/Pasajero.h
@@ -16,4 +16,5 @@ add_executable(202400111_EDD_Practica src/main.cpp
         src/cargadores/CargadorPasajeros.h
         src/cargadores/CargadorCambios.h
         src/utils/Utilidades.h
-        src/utils/Graphviz.h)
+        src/utils/Graphviz.h
+        src/modelos/Equipaje.h)

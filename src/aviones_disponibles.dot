@@ -1,0 +1,13 @@
+digraph G {
+rankdir=LR;
+labelloc="t";
+label="Aviones Disponibles";
+fontsize=20;
+node [shape=box, fontname="Arial"];
+"Registro: N12345\nModelo: Boeing 737\nEstado: Disponible";
+"Registro: N12345\nModelo: Boeing 737\nEstado: Disponible" -> "Registro: N54321\nModelo: Airbus A320\nEstado: Disponible";
+"Registro: N54321\nModelo: Airbus A320\nEstado: Disponible";
+"Registro: N54321\nModelo: Airbus A320\nEstado: Disponible" -> "Registro: N67890\nModelo: Boeing 787\nEstado: Disponible";
+"Registro: N67890\nModelo: Boeing 787\nEstado: Disponible";
+"Registro: N67890\nModelo: Boeing 787\nEstado: Disponible" -> "Registro: N12345\nModelo: Boeing 737\nEstado: Disponible";
+}

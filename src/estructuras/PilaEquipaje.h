@@ -2,13 +2,16 @@
 #define PILAEQUIPAJE_H
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 #include "NodoSimple.h"
+#include "../modelos/Equipaje.h"
+#include "../utils/Graphviz.h"
 
 class PilaEquipaje {
 private:
-    NodoSimple<int> *tope;
+    NodoSimple<Equipaje>* tope;
 
 public:
     PilaEquipaje() {
@@ -19,37 +22,40 @@ public:
         return (tope == nullptr);
     }
 
-    //metemos
-    void push(int maletas) {
-        NodoSimple<int> *nuevo = new NodoSimple<int>(maletas);
+    // metemos equipaje con pasaporte
+    void push(string pasaporte, int maletas) {
+        Equipaje e(pasaporte, maletas);
+        NodoSimple<Equipaje>* nuevo = new NodoSimple<Equipaje>(e);
         nuevo->setSiguiente(tope);
         tope = nuevo;
     }
 
-    //sacamos
-    int pop() {
+    // sacamos equipaje
+    Equipaje pop() {
         if (estaVacia()) {
             cout << "Pila vacia" << endl;
-            return -1;
+            return Equipaje("", -1);
         }
 
-        NodoSimple<int> *aux = tope;
-        int dato = aux->getDato();
+        NodoSimple<Equipaje>* aux = tope;
+        Equipaje dato = aux->getDato();
         tope = tope->getSiguiente();
         delete aux;
         return dato;
     }
 
     void mostrar() {
-        NodoSimple<int> *actual = tope;
+        NodoSimple<Equipaje>* actual = tope;
 
         while (actual != nullptr) {
-            cout << actual->getDato() << endl;
+            Equipaje e = actual->getDato();
+            cout << "Pasaporte: " << e.getPasaporte()
+                 << " | Equipaje: " << e.getCantidad() << endl;
             actual = actual->getSiguiente();
         }
     }
 
-    //generación de reporte graphviz
+    // generación de reporte graphviz
     void generarReporte(string nombre, string titulo) {
         ofstream archivo(nombre + ".dot");
 
@@ -62,13 +68,24 @@ public:
 
         archivo << "node [shape=box, fontname=\"Arial\"];\n";
 
-        NodoSimple<int>* actual = tope;
+        NodoSimple<Equipaje>* actual = tope;
 
         while (actual != nullptr) {
-            archivo << "\"" << actual->getDato() << "\"";
+            Equipaje e = actual->getDato();
+
+            string etiqueta =
+                "Pasaporte: " + e.getPasaporte() + "\\n" +
+                "Equipaje: " + to_string(e.getCantidad());
+
+            archivo << "\"" << etiqueta << "\"";
 
             if (actual->getSiguiente() != nullptr) {
-                archivo << " -> \"" << actual->getSiguiente()->getDato() << "\";\n";
+                Equipaje sig = actual->getSiguiente()->getDato();
+                string etiqueta2 =
+                    "Pasaporte: " + sig.getPasaporte() + "\\n" +
+                    "Equipaje: " + to_string(sig.getCantidad());
+
+                archivo << " -> \"" << etiqueta2 << "\";\n";
             } else {
                 archivo << ";\n";
             }

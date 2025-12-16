@@ -1,0 +1,11 @@
+digraph G {
+rankdir=TB;
+labelloc="t";
+label="Pila de Equipaje Facturado";
+fontsize=20;
+node [shape=box, fontname="Arial"];
+"Pasaporte: P34567890\nEquipaje: 3" -> "Pasaporte: P23456789\nEquipaje: 1";
+"Pasaporte: P23456789\nEquipaje: 1" -> "Pasaporte: P98765432\nEquipaje: 1";
+"Pasaporte: P98765432\nEquipaje: 1" -> "Pasaporte: P12345678\nEquipaje: 2";
+"Pasaporte: P12345678\nEquipaje: 2";
+}

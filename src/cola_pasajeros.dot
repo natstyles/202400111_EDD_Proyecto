@@ -1,0 +1,7 @@
+digraph G {
+rankdir=LR;
+labelloc="t";
+label="Cola de Pasajeros Registrados";
+fontsize=20;
+node [shape=box, fontname="Arial"];
+}
