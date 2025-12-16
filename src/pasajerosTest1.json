@@ -1,0 +1,42 @@
+[
+    {
+        "nombre": "Ana López",
+        "nacionalidad": "Guatemala",
+        "numero_de_pasaporte": "P11111111",
+        "vuelo": "A300",
+        "asiento": 10,
+        "destino": "San Salvador",
+        "origen": "Ciudad de Guatemala",
+        "equipaje_facturado": 1
+    },
+    {
+        "nombre": "Luis Pérez",
+        "nacionalidad": "Guatemala",
+        "numero_de_pasaporte": "P22222222",
+        "vuelo": "A300",
+        "asiento": 10,
+        "destino": "San Salvador",
+        "origen": "Ciudad de Guatemala",
+        "equipaje_facturado": 0
+    },
+    {
+        "nombre": "María Gómez",
+        "nacionalidad": "España",
+        "numero_de_pasaporte": "P33333333",
+        "vuelo": "A450",
+        "asiento": 1,
+        "destino": "Madrid",
+        "origen": "Barcelona",
+        "equipaje_facturado": 2
+    },
+    {
+        "nombre": "Pedro Ruiz",
+        "nacionalidad": "Chile",
+        "numero_de_pasaporte": "P44444444",
+        "vuelo": "A450",
+        "asiento": 25,
+        "destino": "Santiago",
+        "origen": "Lima",
+        "equipaje_facturado": 0
+    }
+]
