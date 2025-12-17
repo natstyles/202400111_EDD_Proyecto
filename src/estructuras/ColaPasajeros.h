@@ -77,26 +77,27 @@ public:
         archivo << "node [shape=box, fontname=\"Arial\"];\n";
 
         NodoSimple<Pasajero>* actual = frente;
+        int contador = 1;
 
+        //declarar nodos
         while (actual != nullptr) {
             Pasajero p = actual->getDato();
 
-            string etiqueta =
-                "Nombre: " + p.getNombre() + "\\n" +
-                "Pasaporte: " + p.getPasaporte();
-
-            archivo << "\"" << etiqueta << "\";\n";
-
-            if (actual->getSiguiente() != nullptr) {
-                Pasajero s = actual->getSiguiente()->getDato();
-                string etiqueta2 =
-                    "Nombre: " + s.getNombre() + "\\n" +
-                    "Pasaporte: " + s.getPasaporte();
-
-                archivo << "\"" << etiqueta << "\" -> \"" << etiqueta2 << "\";\n";
-            }
+            archivo << "q" << contador << " [label=\""
+                    << "Pasajero " << contador << "\\n"
+                    << "Nombre: " << p.getNombre() << "\\n"
+                    << "Pasaporte: " << p.getPasaporte() << "\\n"
+                    << "Vuelo: " << p.getVuelo() << "\\n"
+                    << "Asiento: " << p.getAsiento()
+                    << "\"];\n";
 
             actual = actual->getSiguiente();
+            contador++;
+        }
+
+        //FIFO
+        for (int i = 1; i < contador - 1; i++) {
+            archivo << "q" << i << " -> q" << (i + 1) << ";\n";
         }
 
         archivo << "}\n";

@@ -56,18 +56,18 @@ int main() {
         switch (opcion) {
 
             case 1:
-                cargarAviones("aviones.json", disponibles, mantenimiento);
+                cargarAviones("avionesTest2.json", disponibles, mantenimiento);
                 cout << "Aviones cargados correctamente.\n";
                 break;
 
             case 2:
-                cargarPasajeros("pasajeros.json", cola);
+                cargarPasajeros("pasajerosTest2.json", cola);
                 cout << "Pasajeros cargados correctamente.\n";
                 break;
 
             case 3:
                 procesarCambios(
-                    "Cambios.txt",
+                    "movimientosTest2.txt",
                     cola,
                     listaPasajeros,
                     pila,

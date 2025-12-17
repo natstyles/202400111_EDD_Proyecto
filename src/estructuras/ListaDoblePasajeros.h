@@ -18,15 +18,17 @@ public:
 
     //Insertamos por vuelo y asiento
     void insertarOrdenado(Pasajero p) {
-        NodoDoble<Pasajero> *nuevo = new NodoDoble<Pasajero>(p);
+        NodoDoble<Pasajero>* nuevo = new NodoDoble<Pasajero>(p);
 
+        // Lista vacía
         if (primero == nullptr) {
             primero = nuevo;
             return;
         }
 
-        NodoDoble<Pasajero> *actual = primero;
+        NodoDoble<Pasajero>* actual = primero;
 
+        // Avanzamos mientras el actual va antes que el nuevo
         while (actual != nullptr &&
               (actual->getDato().getVuelo() < p.getVuelo() ||
               (actual->getDato().getVuelo() == p.getVuelo() &&
@@ -34,21 +36,24 @@ public:
             actual = actual->getSiguiente();
                }
 
+        // Insertar al inicio
         if (actual == primero) {
             nuevo->setSiguiente(primero);
             primero->setAnterior(nuevo);
             primero = nuevo;
         }
+        // Insertar al final
         else if (actual == nullptr) {
-            NodoDoble<Pasajero> *temp = primero;
+            NodoDoble<Pasajero>* temp = primero;
             while (temp->getSiguiente() != nullptr)
                 temp = temp->getSiguiente();
 
             temp->setSiguiente(nuevo);
             nuevo->setAnterior(temp);
         }
+        // Insertar en medio
         else {
-            NodoDoble<Pasajero> *ant = actual->getAnterior();
+            NodoDoble<Pasajero>* ant = actual->getAnterior();
             ant->setSiguiente(nuevo);
             nuevo->setAnterior(ant);
             nuevo->setSiguiente(actual);
@@ -112,28 +117,27 @@ public:
         archivo << "node [shape=box, fontname=\"Arial\"];\n";
 
         NodoDoble<Pasajero>* actual = primero;
+        int contador = 1;
 
+        //declaramos todos los nodos
         while (actual != nullptr) {
-
             Pasajero p = actual->getDato();
 
-            string etiqueta =
-                "Nombre: " + p.getNombre() + "\\n" +
-                "Pasaporte: " + p.getPasaporte();
-
-            archivo << "\"" << etiqueta << "\";\n";
-
-            if (actual->getSiguiente() != nullptr) {
-                Pasajero ps = actual->getSiguiente()->getDato();
-                string etiqueta2 =
-                    "Nombre: " + ps.getNombre() + "\\n" +
-                    "Pasaporte: " + ps.getPasaporte();
-
-                archivo << "\"" << etiqueta << "\" -> \"" << etiqueta2 << "\";\n";
-                archivo << "\"" << etiqueta2 << "\" -> \"" << etiqueta << "\";\n";
-            }
+            archivo << "p" << contador << " [label=\""
+                    << "Pasajero " << contador << "\\n"
+                    << "Nombre: " << p.getNombre() << "\\n"
+                    << "Pasaporte: " << p.getPasaporte() << "\\n"
+                    << "Vuelo: " << p.getVuelo() << "\\n"
+                    << "Asiento: " << p.getAsiento()
+                    << "\"];\n";
 
             actual = actual->getSiguiente();
+            contador++;
+        }
+
+        //creamos los enlaces doblemente enlazados
+        for (int i = 1; i < contador - 1; i++) {
+            archivo << "p" << i << " -> p" << (i + 1) << " [dir=both];\n";
         }
 
         archivo << "}\n";
@@ -141,6 +145,7 @@ public:
 
         generarImagen(nombre + ".dot", nombre + ".png");
     }
+
 };
 
 #endif
