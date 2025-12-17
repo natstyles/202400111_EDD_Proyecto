@@ -17,4 +17,5 @@ add_executable(202400111_EDD_Proyecto src/main.cpp
         src/cargadores/CargadorCambios.h
         src/utils/Utilidades.h
         src/utils/Graphviz.h
-        src/modelos/Equipaje.h)
+        src/modelos/Equipaje.h
+        src/estructuras_no_lineales/ArbolBAviones.h)

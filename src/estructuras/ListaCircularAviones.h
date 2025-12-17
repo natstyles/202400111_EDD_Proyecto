@@ -199,6 +199,25 @@ public:
 
         generarImagen(nombre + ".dot", nombre + ".png");
     }
+
+    //extraer por registro
+    bool extraerPorRegistro(string registro, Avion& resultado) {
+        if (estaVacia()) return false;
+
+        NodoDoble<Avion>* actual = primero;
+
+        do {
+            if (actual->getDato().getRegistro() == registro) {
+                resultado = actual->getDato();
+                eliminarPorRegistro(registro);
+                return true;
+            }
+            actual = actual->getSiguiente();
+        } while (actual != primero);
+
+        return false;
+    }
+
 };
 
 #endif

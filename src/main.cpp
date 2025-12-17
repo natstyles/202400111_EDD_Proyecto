@@ -1,194 +1,96 @@
 #include <iostream>
 using namespace std;
 
-//includes
-#include "estructuras/ColaPasajeros.h"
-#include "estructuras/PilaEquipaje.h"
+//Estructuras
 #include "estructuras/ListaCircularAviones.h"
-#include "estructuras/ListaDoblePasajeros.h"
+#include "estructuras_no_lineales/ArbolBAviones.h"
+
+//Cargadores
 #include "cargadores/CargadorAviones.h"
-#include "cargadores/CargadorPasajeros.h"
-#include "cargadores/CargadorCambios.h"
 
 void menu() {
-    cout << "\n----- Gestion de aeropuerto -----\n";
+    cout << "\n----- SISTEMA DE GESTION DE AEROPUERTO -----\n";
     cout << "1. Carga de aviones\n";
-    cout << "2. Carga de pasajeros\n";
-    cout << "3. Carga de movimientos\n";
-    cout << "4. Consultar pasajero\n";
-    cout << "5. Visualizar reportes\n";
-    cout << "6. Visualizar estructuras\n";
-    cout << "7. Asignar pasajero a avion\n";
-    cout << "8. Cambiar estado de avion\n";
-    cout << "9. Salir\n";
-    cout << "Seleccione una opcion: ";
-}
-
-//ver listas de pasajeros, aviones y maletas en consola
-void menuVisualizacion() {
-    cout << "\n----- Menu de vistas -----\n";
-    cout << "1. Mostrar cola de pasajeros\n";
-    cout << "2. Mostrar pasajeros atendidos\n";
-    cout << "3. Mostrar aviones disponibles\n";
-    cout << "4. Mostrar aviones en mantenimiento\n";
-    cout << "5. Regresar al menu principal\n";
+    cout << "2. Cambiar estado de avion\n";
+    cout << "3. Generar reportes\n";
+    cout << "4. Salir\n";
     cout << "Seleccione una opcion: ";
 }
 
 int main() {
-
-    ColaPasajeros cola;
-    PilaEquipaje pila;
-    ListaCircularAviones disponibles;
-    ListaCircularAviones mantenimiento;
-    ListaDoblePasajeros listaPasajeros;
+    ArbolBAviones disponibles;              //Árbol B (orden 5)
+    ListaCircularAviones mantenimiento;     //Lista circular doble
 
     int opcion;
 
     do {
         menu();
+
         if (!(cin >> opcion)) {
-            cin.clear();            //limpiamos el estado de error
-            cin.ignore(1000, '\n'); //limpia buffer
-            opcion = -1;            //pondrá opción inválida obligatoria
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
         }
 
         switch (opcion) {
 
-            case 1:
+            case 1: {
                 cargarAviones("avionesTest2.json", disponibles, mantenimiento);
                 cout << "Aviones cargados correctamente.\n";
                 break;
-
-            case 2:
-                cargarPasajeros("pasajerosTest2.json", cola);
-                cout << "Pasajeros cargados correctamente.\n";
-                break;
-
-            case 3:
-                procesarCambios(
-                    "movimientosTest2.txt",
-                    cola,
-                    listaPasajeros,
-                    pila,
-                    disponibles,
-                    mantenimiento
-                );
-                cout << "Movimientos procesados correctamente.\n";
-                break;
-
-            case 4: {
-                string pass;
-                cout << "Ingrese numero de pasaporte: ";
-                cin >> pass;
-                listaPasajeros.consultar(pass);
-                break;
             }
 
-            case 5:
-                disponibles.generarReporte("aviones_disponibles", "Aviones Disponibles");
-                mantenimiento.generarReporte("aviones_mantenimiento", "Aviones en Mantenimiento");
-                cola.generarReporte("cola_pasajeros", "Cola de Pasajeros Registrados");
-                pila.generarReporte("pila_equipaje", "Pila de Equipaje Facturado");
-                listaPasajeros.generarReporte("lista_pasajeros", "Pasajeros Atendidos");
-                break;
-
-            case 6: {
-                int op2;
-                do {
-                    menuVisualizacion();
-                    cin >> op2;
-
-                    switch (op2) {
-                        case 1:
-                            cout << "\n--- Cola de pasajeros ---\n";
-                            cola.mostrar();
-                            break;
-
-                        case 2:
-                            cout << "\n--- Pasajeros atendidos ---\n";
-                            listaPasajeros.mostrar();
-                            break;
-
-                        case 3:
-                            cout << "\n--- Aviones disponibles ---\n";
-                            disponibles.mostrar();
-                            break;
-
-                        case 4:
-                            cout << "\n--- Aviones en mantenimientos ---\n";
-                            mantenimiento.mostrar();
-                            break;
-
-                        case 5:
-                            cout << "Regresando al menu principal...\n";
-                            break;
-
-                        default:
-                            cout << "Opcion invalida, intenta de nuevo.\n";
-                    }
-
-                } while (op2 != 5);
-
-                break;
-            }
-
-            case 7: {
-                if (cola.estaVacia()) {
-                    cout << "No hay pasajeros en la cola.\n";
-                    break;
-                }
-
-                if (disponibles.estaVacia()) {
-                    cout << "No hay aviones disponibles.\n";
-                    break;
-                }
-
-                Pasajero p = cola.desencolar();
-                Avion a = disponibles.obtenerPrimero();   // solo referencia
-
-                cout << "\nAsignando pasajero al avion...\n";
-                cout << "Pasajero: " << p.getNombre() << endl;
-                cout << "Pasaporte: " << p.getPasaporte() << endl;
-                cout << "Avion: " << a.getRegistro() << endl;
-
-                listaPasajeros.insertarOrdenado(p);
-
-                if (p.getEquipaje() > 0) {
-                    pila.push(p.getPasaporte(), p.getEquipaje());
-                }
-
-                cout << "Pasajero asignado correctamente.\n";
-                break;
-            }
-
-            case 8: {
+            case 2: {
                 string registro;
-                cout << "Ingrese el registro del avion: ";
+                cout << "Ingrese el numero de registro del avion: ";
                 cin >> registro;
 
-                if (disponibles.buscarYEnviarAMantenimiento(registro, mantenimiento)) {
+                Avion a;
+
+                // Intentar sacar de disponibles
+                if (disponibles.extraer(registro, a)) {
+                    a.setEstado("Mantenimiento");
+                    mantenimiento.insertar(a);
                     cout << "Avion enviado a mantenimiento.\n";
                 }
-                else if (mantenimiento.buscarYEnviarADisponibles(registro, disponibles)) {
-                    cout << "Avion enviado a disponibles.\n";
-                }
                 else {
-                    cout << "Avion no encontrado.\n";
+                    // Intentar sacar de mantenimiento
+                    if (mantenimiento.extraerPorRegistro(registro, a)) {
+                        a.setEstado("Disponible");
+                        disponibles.insertar(a);
+                        cout << "Avion enviado a disponibles.\n";
+                    }
+                    else {
+                        cout << "Avion no encontrado.\n";
+                    }
                 }
-
                 break;
             }
 
-            case 9:
+            case 3: {
+                disponibles.generarReporte(
+                    "aviones_disponibles",
+                    "Arbol B - Aviones Disponibles"
+                );
+
+                mantenimiento.generarReporte(
+                    "aviones_mantenimiento",
+                    "Lista Circular - Aviones en Mantenimiento"
+                );
+
+                cout << "Reportes generados correctamente.\n";
+                break;
+            }
+
+            case 4:
                 cout << "Saliendo del sistema...\n";
                 break;
 
             default:
-                cout << "Opcion invalida, intenta de nuevo!\n";
+                cout << "Opcion invalida, intente de nuevo.\n";
         }
 
-    } while (opcion != 9);
+    } while (opcion != 4);
 
     return 0;
 }

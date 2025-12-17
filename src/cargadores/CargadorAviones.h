@@ -6,12 +6,13 @@
 #include <iostream>
 #include "../estructuras/ListaCircularAviones.h"
 #include "../utils/Utilidades.h"
+#include "../estructuras_no_lineales/ArbolBAviones.h"
 
 
 using namespace std;
 
 void cargarAviones(string ruta,
-                   ListaCircularAviones &disponibles,
+                   ArbolBAviones &disponibles,
                    ListaCircularAviones &mantenimiento) {
 
     ifstream archivo(ruta);
@@ -73,9 +74,6 @@ void cargarAviones(string ruta,
     cout << "Aviones cargados: " << contador << endl;
 
     //prueba
-    cout << "\n--- AVIONES DISPONIBLES ---\n";
-    disponibles.mostrar();
-
     cout << "\n--- AVIONES EN MANTENIMIENTO ---\n";
     mantenimiento.mostrar();
 }
