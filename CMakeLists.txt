@@ -18,4 +18,8 @@ add_executable(202400111_EDD_Proyecto src/main.cpp
         src/utils/Utilidades.h
         src/utils/Graphviz.h
         src/modelos/Equipaje.h
-        src/estructuras_no_lineales/ArbolBAviones.h)
+        src/estructuras_no_lineales/ArbolBAviones.h
+        src/modelos/Piloto.h
+        src/estructuras_no_lineales/NodoArbolPiloto.h
+        src/estructuras_no_lineales/ArbolPilotos.h
+        src/cargadores/CargadorPilotos.h)

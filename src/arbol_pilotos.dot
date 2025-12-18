@@ -1,0 +1,9 @@
+digraph G {
+labelloc="t";
+label="Arbol de Pilotos (2)";
+fontsize=20;
+node [shape=box, style=rounded];
+"1" [label="ID: 1\nLicencia: ATPL\nHoras: 1500"];
+"1" -> "2";
+"2" [label="ID: 2\nLicencia: CPL\nHoras: 800"];
+}

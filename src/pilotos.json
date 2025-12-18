@@ -1,0 +1,16 @@
+{
+  "pilotos": [
+    {
+      "id": 1,
+      "nombre": "Juan Perez",
+      "horas_vuelo": 1500,
+      "licencia": "ATPL"
+    },
+    {
+      "id": 2,
+      "nombre": "Maria Lopez",
+      "horas_vuelo": 800,
+      "licencia": "CPL"
+    }
+  ]
+}
