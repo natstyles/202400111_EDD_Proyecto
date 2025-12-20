@@ -22,4 +22,6 @@ add_executable(202400111_EDD_Proyecto src/main.cpp
         src/modelos/Piloto.h
         src/estructuras_no_lineales/NodoArbolPiloto.h
         src/estructuras_no_lineales/ArbolPilotos.h
-        src/cargadores/CargadorPilotos.h)
+        src/cargadores/CargadorPilotos.h
+        src/estructuras_no_lineales/TablaHashPilotos.h
+        src/estructuras_no_lineales/ListaSimplePilotos.h)

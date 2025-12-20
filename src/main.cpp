@@ -8,6 +8,7 @@ using namespace std;
 
 //PILOTOS
 #include "estructuras_no_lineales/ArbolPilotos.h"
+#include "estructuras_no_lineales/TablaHashPilotos.h"
 #include "cargadores/CargadorPilotos.h"
 
 void menu() {
@@ -16,9 +17,10 @@ void menu() {
     cout << "2. Cambiar estado de avion\n";
     cout << "3. Reportes de aviones\n";
     cout << "4. Cargar pilotos\n";
-    cout << "5. Recorridos de pilotos\n";
+    cout << "5. Recorridos de pilotos (ABB)\n";
     cout << "6. Reporte arbol de pilotos\n";
-    cout << "7. Salir\n";
+    cout << "7. Reporte tabla hash de pilotos\n";
+    cout << "8. Salir\n";
     cout << "Seleccione una opcion: ";
 }
 
@@ -39,6 +41,7 @@ int main() {
 
     //PILOTOS
     ArbolPilotos arbolPilotos;
+    TablaHashPilotos tablaHashPilotos;
 
     int opcion;
 
@@ -53,6 +56,7 @@ int main() {
 
         switch (opcion) {
 
+            //AVIONES
             case 1:
                 cargarAviones("avionesTest2.json", disponibles, mantenimiento);
                 break;
@@ -91,8 +95,10 @@ int main() {
                 cout << "Reportes de aviones generados.\n";
                 break;
 
+            //PILOTOS
             case 4:
-                cargarPilotos("pilotos.json", arbolPilotos);
+                cargarPilotos("pilotos.json", arbolPilotos, tablaHashPilotos);
+                cout << "Pilotos cargados en ABB y Tabla Hash.\n";
                 break;
 
             case 5: {
@@ -129,6 +135,11 @@ int main() {
                 break;
 
             case 7:
+                tablaHashPilotos.generarReporte("tabla_hash_pilotos");
+                cout << "Reporte de tabla hash generado.\n";
+                break;
+
+            case 8:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -136,7 +147,7 @@ int main() {
                 cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 7);
+    } while (opcion != 8);
 
     return 0;
 }

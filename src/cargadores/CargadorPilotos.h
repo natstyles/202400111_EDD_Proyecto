@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void cargarPilotos(string ruta, ArbolPilotos& arbol) {
+void cargarPilotos(string ruta, ArbolPilotos& arbol, TablaHashPilotos& hash) {
 
     ifstream archivo(ruta);
 
@@ -45,6 +45,7 @@ void cargarPilotos(string ruta, ArbolPilotos& arbol) {
             // cuando ya tenemos todos los campos
             Piloto p(id, nombre, horasVuelo, licencia);
             arbol.insertar(p);
+            hash.insertar(p);
             contador++;
         }
     }
