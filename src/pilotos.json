@@ -7,9 +7,45 @@
       "licencia": "ATPL"
     },
     {
-      "id": 2,
+      "id": 20,
       "nombre": "Maria Lopez",
       "horas_vuelo": 800,
+      "licencia": "CPL"
+    },
+    {
+      "id": 39,
+      "nombre": "Carlos Gomez",
+      "horas_vuelo": 2200,
+      "licencia": "ATPL"
+    },
+    {
+      "id": 2,
+      "nombre": "Ana Ramirez",
+      "horas_vuelo": 600,
+      "licencia": "PPL"
+    },
+    {
+      "id": 21,
+      "nombre": "Pedro Martinez",
+      "horas_vuelo": 1200,
+      "licencia": "CPL"
+    },
+    {
+      "id": 40,
+      "nombre": "Luis Hernandez",
+      "horas_vuelo": 1800,
+      "licencia": "ATPL"
+    },
+    {
+      "id": 3,
+      "nombre": "Sofia Torres",
+      "horas_vuelo": 950,
+      "licencia": "PPL"
+    },
+    {
+      "id": 22,
+      "nombre": "Diego Castillo",
+      "horas_vuelo": 1400,
       "licencia": "CPL"
     }
   ]

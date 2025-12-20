@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 #include "NodoArbolPiloto.h"
@@ -86,6 +87,21 @@ private:
         return 1 + contarRec(nodo->getIzq()) + contarRec(nodo->getDer());
     }
 
+    void recolectar(NodoArbolPiloto* nodo, vector<Piloto>& lista) {
+        if (!nodo) return;
+
+        recolectar(nodo->getIzq(), lista);
+        lista.push_back(nodo->getPiloto());
+        recolectar(nodo->getDer(), lista);
+    }
+
+    void liberar(NodoArbolPiloto* nodo) {
+        if (!nodo) return;
+        liberar(nodo->getIzq());
+        liberar(nodo->getDer());
+        delete nodo;
+    }
+
 public:
     ArbolPilotos() {
         raiz = nullptr;
@@ -139,6 +155,30 @@ public:
         system("dot -Tpng arbol_pilotos.dot -o arbol_pilotos.png");
         system("start arbol_pilotos.png");
     }
+
+    bool extraerPorId(int id, Piloto& resultado) {
+    if (!raiz) return false;
+
+    vector<Piloto> pilotos;
+    recolectar(raiz, pilotos);
+
+    bool encontrado = false;
+
+    liberar(raiz);
+    raiz = nullptr;
+
+    for (Piloto& p : pilotos) {
+        if (p.getId() == id && !encontrado) {
+            resultado = p;
+            encontrado = true;
+        } else {
+            insertar(p);
+        }
+    }
+
+    return encontrado;
+}
+
 };
 
 #endif

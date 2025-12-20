@@ -20,7 +20,8 @@ void menu() {
     cout << "5. Recorridos de pilotos (ABB)\n";
     cout << "6. Reporte arbol de pilotos\n";
     cout << "7. Reporte tabla hash de pilotos\n";
-    cout << "8. Salir\n";
+    cout << "8. Dar de baja piloto\n";
+    cout << "9. Salir\n";
     cout << "Seleccione una opcion: ";
 }
 
@@ -139,7 +140,27 @@ int main() {
                 cout << "Reporte de tabla hash generado.\n";
                 break;
 
-            case 8:
+            case 8: {
+                int id;
+                cout << "Ingrese el ID del piloto a dar de baja: ";
+                cin >> id;
+
+                Piloto p;
+
+                if (arbolPilotos.extraerPorId(id, p)) {
+                    tablaHashPilotos.eliminar(id);
+
+                    cout << "Piloto dado de baja correctamente:\n";
+                    cout << "ID: " << p.getId()
+                         << " | Nombre: " << p.getNombre() << endl;
+                }
+                else {
+                    cout << "Piloto no encontrado.\n";
+                }
+                break;
+            }
+
+            case 9:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -147,7 +168,7 @@ int main() {
                 cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 8);
+    } while (opcion != 9);
 
     return 0;
 }
