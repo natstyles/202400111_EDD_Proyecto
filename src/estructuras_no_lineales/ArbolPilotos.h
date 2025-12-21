@@ -57,24 +57,29 @@ private:
     void generarDot(NodoArbolPiloto* nodo, ofstream& archivo) {
         if (!nodo) return;
 
-        //nodo con información completa
-        archivo << "\"" << nodo->getPiloto().getId() << "\" "
+        // ID interno para Graphviz (numérico y único)
+        int idNodo = nodo->getPiloto().getIdNumerico();
+
+        // Nodo con información completa
+        archivo << "n" << idNodo << " "
                 << "[label=\""
-                << "ID: " << nodo->getPiloto().getId() << "\\n"
+                << "ID: " << nodo->getPiloto().getIdCompleto() << "\\n"
                 << "Licencia: " << nodo->getPiloto().getLicencia() << "\\n"
                 << "Horas: " << nodo->getPiloto().getHorasVuelo()
                 << "\"];\n";
 
-        //enlace izquierdo
+        // Enlace izquierdo
         if (nodo->getIzq()) {
-            archivo << "\"" << nodo->getPiloto().getId() << "\" -> \""
-                    << nodo->getIzq()->getPiloto().getId() << "\";\n";
+            archivo << "n" << idNodo << " -> n"
+                    << nodo->getIzq()->getPiloto().getIdNumerico()
+                    << ";\n";
         }
 
-        //enlace derecho
+        // Enlace derecho
         if (nodo->getDer()) {
-            archivo << "\"" << nodo->getPiloto().getId() << "\" -> \""
-                    << nodo->getDer()->getPiloto().getId() << "\";\n";
+            archivo << "n" << idNodo << " -> n"
+                    << nodo->getDer()->getPiloto().getIdNumerico()
+                    << ";\n";
         }
 
         generarDot(nodo->getIzq(), archivo);

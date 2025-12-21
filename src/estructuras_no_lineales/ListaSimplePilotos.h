@@ -34,11 +34,11 @@ public:
         }
     }
 
-    bool buscarPorId(int id, Piloto& resultado) {
+    bool buscarPorId(int idNumerico, Piloto& resultado) {
         NodoSimple<Piloto>* actual = primero;
 
         while (actual != nullptr) {
-            if (actual->getDato().getId() == id) {
+            if (actual->getDato().getIdNumerico() == idNumerico) {
                 resultado = actual->getDato();
                 return true;
             }
@@ -47,11 +47,11 @@ public:
         return false;
     }
 
-    bool eliminarPorId(int id) {
+    bool eliminarPorId(int idNumerico) {
         if (estaVacia()) return false;
 
         // eliminar primero
-        if (primero->getDato().getId() == id) {
+        if (primero->getDato().getIdNumerico() == idNumerico) {
             NodoSimple<Piloto>* temp = primero;
             primero = primero->getSiguiente();
             delete temp;
@@ -60,7 +60,7 @@ public:
 
         NodoSimple<Piloto>* actual = primero;
         while (actual->getSiguiente() != nullptr) {
-            if (actual->getSiguiente()->getDato().getId() == id) {
+            if (actual->getSiguiente()->getDato().getIdNumerico() == idNumerico) {
                 NodoSimple<Piloto>* temp = actual->getSiguiente();
                 actual->setSiguiente(temp->getSiguiente());
                 delete temp;
@@ -74,13 +74,14 @@ public:
     void mostrar() {
         NodoSimple<Piloto>* actual = primero;
         while (actual != nullptr) {
-            cout << actual->getDato().getId()
+            cout << actual->getDato().getIdCompleto()
                  << " (" << actual->getDato().getNombre() << ") -> ";
             actual = actual->getSiguiente();
         }
         cout << "NULL\n";
     }
 
+    // ================= GRAPHVIZ =================
     void generarDot(string padre, ofstream& archivo) {
         NodoSimple<Piloto>* actual = primero;
         int i = 0;
@@ -88,10 +89,11 @@ public:
         string anterior = padre;
 
         while (actual != nullptr) {
-            string nodo = padre + "_n" + to_string(i);
+            int idNodo = actual->getDato().getIdNumerico();
+            string nodo = padre + "_n" + to_string(idNodo);
 
-            archivo << nodo << " [label=\"ID: "
-                    << actual->getDato().getId() << "\\n"
+            archivo << nodo << " [label=\""
+                    << "ID: " << actual->getDato().getIdCompleto() << "\\n"
                     << "Licencia: " << actual->getDato().getLicencia()
                     << "\"];\n";
 

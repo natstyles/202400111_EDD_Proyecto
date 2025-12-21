@@ -21,7 +21,8 @@ void cargarPilotos(string ruta, ArbolPilotos& arbol, TablaHashPilotos& hash) {
     }
 
     string linea;
-    int id = 0;
+    string idCompleto = "";
+    int idNumerico = 0;
     string nombre;
     int horasVuelo = 0;
     string licencia;
@@ -30,24 +31,34 @@ void cargarPilotos(string ruta, ArbolPilotos& arbol, TablaHashPilotos& hash) {
 
     while (getline(archivo, linea)) {
 
-        if (linea.find("\"id\"") != string::npos) {
-            id = stoi(linea.substr(linea.find(":") + 1));
-        }
+        if (linea.find("\"numero_de_id\"") != string::npos ||
+            linea.find("\"id\"") != string::npos) {
+
+            // Ejemplo: "P12345678"
+            idCompleto = limpiar(linea.substr(linea.find(":") + 1));
+
+            // Quitamos la primera letra (P) y convertimos a int
+            idNumerico = stoi(idCompleto.substr(1));
+            }
         else if (linea.find("\"nombre\"") != string::npos) {
             nombre = limpiar(linea.substr(linea.find(":") + 1));
         }
-        else if (linea.find("horas_vuelo") != string::npos) {
+        else if (linea.find("\"horas_de_vuelo\"") != string::npos ||
+                 linea.find("\"horas_vuelo\"") != string::npos) {
+
             horasVuelo = stoi(linea.substr(linea.find(":") + 1));
-        }
-        else if (linea.find("\"licencia\"") != string::npos) {
+                 }
+        else if (linea.find("\"tipo_de_licencia\"") != string::npos ||
+                 linea.find("\"licencia\"") != string::npos) {
+
             licencia = limpiar(linea.substr(linea.find(":") + 1));
 
-            // cuando ya tenemos todos los campos
-            Piloto p(id, nombre, horasVuelo, licencia);
+            // Cuando ya tenemos todos los campos
+            Piloto p(idCompleto, idNumerico, nombre, horasVuelo, licencia);
             arbol.insertar(p);
             hash.insertar(p);
             contador++;
-        }
+                 }
     }
 
     archivo.close();

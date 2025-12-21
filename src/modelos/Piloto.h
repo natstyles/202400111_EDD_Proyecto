@@ -6,34 +6,33 @@ using namespace std;
 
 class Piloto {
 private:
-    int id;                 //llave para tabla hash
+    string idCompleto;
+    int idNumerico;
     string nombre;
-    int horasVuelo;         //llave para ABB
+    int horasVuelo;
     string licencia;
 
 public:
     Piloto() {
-        id = 0;
+        idNumerico = 0;
         horasVuelo = 0;
     }
 
-    Piloto(int id, string nombre, int horasVuelo, string licencia) {
-        this->id = id;
+    Piloto(string idCompleto, int idNumerico,
+           string nombre, int horasVuelo, string licencia) {
+        this->idCompleto = idCompleto;
+        this->idNumerico = idNumerico;
         this->nombre = nombre;
         this->horasVuelo = horasVuelo;
         this->licencia = licencia;
     }
 
-    //get
-    int getId() const { return id; }
+    // Getters
+    string getIdCompleto() const { return idCompleto; }
+    int getIdNumerico() const { return idNumerico; }
     string getNombre() const { return nombre; }
     int getHorasVuelo() const { return horasVuelo; }
     string getLicencia() const { return licencia; }
-
-    //set
-    void setNombre(string n) { nombre = n; }
-    void setHorasVuelo(int h) { horasVuelo = h; }
-    void setLicencia(string l) { licencia = l; }
 };
 
 #endif

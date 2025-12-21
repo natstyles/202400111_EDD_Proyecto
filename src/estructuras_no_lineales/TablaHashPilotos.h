@@ -14,8 +14,8 @@ private:
     int tamTabla;
     ListaSimplePilotos* tabla;
 
-    int funcionHash(int id) {
-        return id % tamTabla;
+    int funcionHash(int idNumerico) {
+        return idNumerico % tamTabla;
     }
 
 public:
@@ -25,18 +25,18 @@ public:
     }
 
     void insertar(Piloto p) {
-        int indice = funcionHash(p.getId());
+        int indice = funcionHash(p.getIdNumerico());
         tabla[indice].insertarFinal(p);
     }
 
-    bool buscar(int id, Piloto& resultado) {
-        int indice = funcionHash(id);
-        return tabla[indice].buscarPorId(id, resultado);
+    bool buscar(int idNumerico, Piloto& resultado) {
+        int indice = funcionHash(idNumerico);
+        return tabla[indice].buscarPorId(idNumerico, resultado);
     }
 
-    bool eliminar(int id) {
-        int indice = funcionHash(id);
-        return tabla[indice].eliminarPorId(id);
+    bool eliminar(int idNumerico) {
+        int indice = funcionHash(idNumerico);
+        return tabla[indice].eliminarPorId(idNumerico);
     }
 
     void mostrar() {
