@@ -1,17 +1,19 @@
 digraph G {
 labelloc="t";
-label="Arbol de Pilotos (6)";
+label="Arbol de Pilotos (7)";
 fontsize=20;
 node [shape=box, style=rounded];
-"2" [label="ID: 2\nLicencia: PPL\nHoras: 600"];
-"2" -> "20";
-"20" [label="ID: 20\nLicencia: CPL\nHoras: 800"];
-"20" -> "3";
-"3" [label="ID: 3\nLicencia: PPL\nHoras: 950"];
-"3" -> "21";
-"21" [label="ID: 21\nLicencia: CPL\nHoras: 1200"];
-"21" -> "22";
 "22" [label="ID: 22\nLicencia: CPL\nHoras: 1400"];
-"22" -> "1";
-"1" [label="ID: 1\nLicencia: ATPL\nHoras: 1500"];
+"22" -> "20";
+"22" -> "39";
+"20" [label="ID: 20\nLicencia: CPL\nHoras: 800"];
+"20" -> "2";
+"20" -> "21";
+"2" [label="ID: 2\nLicencia: PPL\nHoras: 600"];
+"21" [label="ID: 21\nLicencia: CPL\nHoras: 1200"];
+"21" -> "3";
+"3" [label="ID: 3\nLicencia: PPL\nHoras: 950"];
+"39" [label="ID: 39\nLicencia: ATPL\nHoras: 2200"];
+"39" -> "40";
+"40" [label="ID: 40\nLicencia: ATPL\nHoras: 1800"];
 }

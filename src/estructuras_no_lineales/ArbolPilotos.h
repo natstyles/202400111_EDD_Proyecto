@@ -87,19 +87,59 @@ private:
         return 1 + contarRec(nodo->getIzq()) + contarRec(nodo->getDer());
     }
 
-    void recolectar(NodoArbolPiloto* nodo, vector<Piloto>& lista) {
-        if (!nodo) return;
+    NodoArbolPiloto* eliminarNodo(NodoArbolPiloto* nodo,
+                              int horas,
+                              bool& eliminado,
+                              Piloto& eliminadoPiloto) {
+        if (!nodo) return nullptr;
 
-        recolectar(nodo->getIzq(), lista);
-        lista.push_back(nodo->getPiloto());
-        recolectar(nodo->getDer(), lista);
+        if (horas < nodo->getPiloto().getHorasVuelo()) {
+            nodo->setIzq(eliminarNodo(nodo->getIzq(), horas, eliminado, eliminadoPiloto));
+        }
+        else if (horas > nodo->getPiloto().getHorasVuelo()) {
+            nodo->setDer(eliminarNodo(nodo->getDer(), horas, eliminado, eliminadoPiloto));
+        }
+        else {
+            // Nodo encontrado
+            eliminado = true;
+            eliminadoPiloto = nodo->getPiloto();
+
+            // Caso 1: hoja
+            if (!nodo->getIzq() && !nodo->getDer()) {
+                delete nodo;
+                return nullptr;
+            }
+
+            // Caso 2: un hijo
+            if (!nodo->getIzq()) {
+                NodoArbolPiloto* temp = nodo->getDer();
+                delete nodo;
+                return temp;
+            }
+            if (!nodo->getDer()) {
+                NodoArbolPiloto* temp = nodo->getIzq();
+                delete nodo;
+                return temp;
+            }
+
+            // Caso 3: dos hijos
+            NodoArbolPiloto* mayorIzq = obtenerMayor(nodo->getIzq());
+            nodo->setPiloto(mayorIzq->getPiloto());
+            nodo->setIzq(eliminarNodo(
+                nodo->getIzq(),
+                mayorIzq->getPiloto().getHorasVuelo(),
+                eliminado,
+                eliminadoPiloto
+            ));
+        }
+        return nodo;
     }
 
-    void liberar(NodoArbolPiloto* nodo) {
-        if (!nodo) return;
-        liberar(nodo->getIzq());
-        liberar(nodo->getDer());
-        delete nodo;
+    NodoArbolPiloto* obtenerMayor(NodoArbolPiloto* nodo) {
+        while (nodo->getDer() != nullptr) {
+            nodo = nodo->getDer();
+        }
+        return nodo;
     }
 
 public:
@@ -156,28 +196,12 @@ public:
         system("start arbol_pilotos.png");
     }
 
-    bool extraerPorId(int id, Piloto& resultado) {
-    if (!raiz) return false;
-
-    vector<Piloto> pilotos;
-    recolectar(raiz, pilotos);
-
-    bool encontrado = false;
-
-    liberar(raiz);
-    raiz = nullptr;
-
-    for (Piloto& p : pilotos) {
-        if (p.getId() == id && !encontrado) {
-            resultado = p;
-            encontrado = true;
-        } else {
-            insertar(p);
-        }
+    //dar de baja
+    bool eliminarPorHoras(int horas, Piloto& eliminado) {
+        bool eliminadoFlag = false;
+        raiz = eliminarNodo(raiz, horas, eliminadoFlag, eliminado);
+        return eliminadoFlag;
     }
-
-    return encontrado;
-}
 
 };
 

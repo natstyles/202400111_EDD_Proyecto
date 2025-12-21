@@ -147,15 +147,19 @@ int main() {
 
                 Piloto p;
 
-                if (arbolPilotos.extraerPorId(id, p)) {
-                    tablaHashPilotos.eliminar(id);
-
-                    cout << "Piloto dado de baja correctamente:\n";
-                    cout << "ID: " << p.getId()
-                         << " | Nombre: " << p.getNombre() << endl;
+                //Buscar en la tabla hash
+                if (!tablaHashPilotos.buscar(id, p)) {
+                    cout << "Piloto no encontrado\n";
+                    break;
                 }
-                else {
-                    cout << "Piloto no encontrado.\n";
+
+                //Eliminar del ABB usando HORAS
+                if (arbolPilotos.eliminarPorHoras(p.getHorasVuelo(), p)) {
+                    //Eliminar de la hash
+                    tablaHashPilotos.eliminar(id);
+                    cout << "Piloto dado de baja correctamente\n";
+                } else {
+                    cout << "Error al eliminar del arbol\n";
                 }
                 break;
             }
