@@ -1,0 +1,13 @@
+digraph Rutas {
+rankdir=LR;
+labelloc="t";
+label="Grafo de Rutas (4 ciudades)";
+fontsize=20;
+"Jaen" -> "Sevilla" [label="242 km"];
+"Granada" -> "Sevilla" [label="256 km"];
+"Granada" -> "Jaen" [label="99 km"];
+"Sevilla" -> "Cadiz" [label="125 km"];
+"Sevilla" -> "Granada" [label="256 km"];
+"Sevilla" -> "Jaen" [label="242 km"];
+"Cadiz" -> "Sevilla" [label="125 km"];
+}

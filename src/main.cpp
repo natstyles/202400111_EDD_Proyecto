@@ -11,6 +11,11 @@ using namespace std;
 #include "estructuras_no_lineales/TablaHashPilotos.h"
 #include "cargadores/CargadorPilotos.h"
 
+//RUTAS
+#include "estructuras_no_lineales/GrafoRutas.h"
+#include "cargadores/CargadorRutas.h"
+GrafoRutas grafoRutas;
+
 void menu() {
     cout << "\n----- SISTEMA DE GESTION DE AEROPUERTO -----\n";
     cout << "1. Cargar aviones\n";
@@ -21,7 +26,9 @@ void menu() {
     cout << "6. Reporte arbol de pilotos\n";
     cout << "7. Reporte tabla hash de pilotos\n";
     cout << "8. Dar de baja piloto\n";
-    cout << "9. Salir\n";
+    cout << "9. Cargar rutas\n";
+    cout << "10. Reporte grafo de rutas\n";
+    cout << "11. Salir\n";
     cout << "Seleccione una opcion: ";
 }
 
@@ -171,7 +178,22 @@ int main() {
                 break;
             }
 
-            case 9:
+            case 9: {
+                if (CargadorRutas::cargar(grafoRutas)) {
+                    cout << "Rutas cargadas correctamente.\n";
+                } else {
+                    cout << "Error al cargar rutas.\n";
+                }
+                break;
+            }
+
+            case 10: {
+                grafoRutas.generarReporte("grafo_rutas", "Grafo de Rutas");
+                cout << "Reporte de rutas generado.\n";
+                break;
+            }
+
+            case 11:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -179,7 +201,7 @@ int main() {
                 cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 9);
+    } while (opcion != 11);
 
     return 0;
 }
