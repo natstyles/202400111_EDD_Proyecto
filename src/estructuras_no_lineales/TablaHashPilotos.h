@@ -25,18 +25,18 @@ public:
     }
 
     void insertar(Piloto p) {
-        int indice = funcionHash(p.getIdNumerico());
+        int indice = funcionHash(p.getIdCompleto());
         tabla[indice].insertarFinal(p);
     }
 
-    bool buscar(int idNumerico, Piloto& resultado) {
-        int indice = funcionHash(idNumerico);
-        return tabla[indice].buscarPorId(idNumerico, resultado);
+    bool buscar(const string& idCompleto, Piloto& resultado) {
+        int indice = funcionHash(idCompleto);
+        return tabla[indice].buscarPorIdCompleto(idCompleto, resultado);
     }
 
-    bool eliminar(int idNumerico) {
-        int indice = funcionHash(idNumerico);
-        return tabla[indice].eliminarPorId(idNumerico);
+    bool eliminar(const string& idCompleto) {
+        int indice = funcionHash(idCompleto);
+        return tabla[indice].eliminarPorIdCompleto(idCompleto);
     }
 
     void mostrar() {
@@ -70,6 +70,28 @@ public:
     ~TablaHashPilotos() {
         delete[] tabla;
     }
+
+    int calcularLlaveHash(const string& idCompleto) {
+        int suma = 0;
+
+        // 1. Letra inicial → ASCII
+        suma += (int)idCompleto[0];
+
+        // 2. Sumar los 9 dígitos
+        for (int i = 1; i < idCompleto.length(); i++) {
+            if (isdigit(idCompleto[i])) {
+                suma += idCompleto[i] - '0';
+            }
+        }
+
+        return suma;
+    }
+
+    int funcionHash(const string& idCompleto) {
+        int llave = calcularLlaveHash(idCompleto);
+        return llave % tamTabla; // M = 19
+    }
+
 };
 
 #endif

@@ -1,52 +1,66 @@
-{
-  "pilotos": [
-    {
-      "id": P1,
-      "nombre": "Juan Perez",
-      "horas_vuelo": 1500,
-      "licencia": "ATPL"
-    },
-    {
-      "id": P20,
-      "nombre": "Maria Lopez",
-      "horas_vuelo": 800,
-      "licencia": "CPL"
-    },
-    {
-      "id": P39,
-      "nombre": "Carlos Gomez",
-      "horas_vuelo": 2200,
-      "licencia": "ATPL"
-    },
-    {
-      "id": P2,
-      "nombre": "Ana Ramirez",
-      "horas_vuelo": 600,
-      "licencia": "PPL"
-    },
-    {
-      "id": P21,
-      "nombre": "Pedro Martinez",
-      "horas_vuelo": 1200,
-      "licencia": "CPL"
-    },
-    {
-      "id": P40,
-      "nombre": "Luis Hernandez",
-      "horas_vuelo": 1800,
-      "licencia": "ATPL"
-    },
-    {
-      "id": P3,
-      "nombre": "Sofia Torres",
-      "horas_vuelo": 950,
-      "licencia": "PPL"
-    },
-    {
-      "id": P22,
-      "nombre": "Diego Castillo",
-      "horas_vuelo": 1400,
-      "licencia": "CPL"
-    }
-  ]
-}
+[
+  {
+    "nombre": "John Doe",
+    "nacionalidad": "Estados Unidos",
+    "numero_de_id": "P12345678",
+    "vuelo": "A100",
+    "horas_de_vuelo": 600,
+    "tipo_de_licencia": "PPL"
+  },
+  {
+    "nombre": "Jane Smith",
+    "nacionalidad": "Reino Unido",
+    "numero_de_id": "p87654321",
+    "vuelo": "A200",
+    "horas_de_vuelo": 99,
+    "tipo_de_licencia": "CPL"
+  },
+  {
+    "nombre": "Carlos Gomez",
+    "nacionalidad": "España",
+    "numero_de_id": "A00000001",
+    "vuelo": "B300",
+    "horas_de_vuelo": 1200,
+    "tipo_de_licencia": "ATPL"
+  },
+  {
+    "nombre": "Maria Lopez",
+    "nacionalidad": "México",
+    "numero_de_id": "Z11111111",
+    "vuelo": "C400",
+    "horas_de_vuelo": 450,
+    "tipo_de_licencia": "CPL"
+  },
+  {
+    "nombre": "Luis Fernandez",
+    "nacionalidad": "Argentina",
+    "numero_de_id": "a22222222",
+    "vuelo": "D500",
+    "horas_de_vuelo": 300,
+    "tipo_de_licencia": "PPL"
+  },
+  {
+    "nombre": "Anna Muller",
+    "nacionalidad": "Alemania",
+    "numero_de_id": "M33333333",
+    "vuelo": "E600",
+    "horas_de_vuelo": 850,
+    "tipo_de_licencia": "ATPL"
+  },
+  {
+    "nombre": "Kenji Tanaka",
+    "nacionalidad": "Japón",
+    "numero_de_id": "k44444444",
+    "vuelo": "F700",
+    "horas_de_vuelo": 150,
+    "tipo_de_licencia": "CPL"
+  },
+  {
+    "nombre": "Laura Rossi",
+    "nacionalidad": "Italia",
+    "numero_de_id": "R77777777",
+    "vuelo": "I1000",
+    "horas_de_vuelo": 520,
+    "tipo_de_licencia": "CPL"
+  }
+]

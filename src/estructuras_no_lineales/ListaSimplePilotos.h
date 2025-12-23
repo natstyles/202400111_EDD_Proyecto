@@ -2,6 +2,7 @@
 #define LISTASIMPLEPILOTOS_H
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 #include "../estructuras/NodoSimple.h"
@@ -20,6 +21,7 @@ public:
         return primero == nullptr;
     }
 
+    //INSERCIÓN
     void insertarFinal(Piloto p) {
         NodoSimple<Piloto>* nuevo = new NodoSimple<Piloto>(p);
 
@@ -34,11 +36,12 @@ public:
         }
     }
 
-    bool buscarPorId(int idNumerico, Piloto& resultado) {
+    //BUSQUEDA
+    bool buscarPorIdCompleto(const string& idCompleto, Piloto& resultado) {
         NodoSimple<Piloto>* actual = primero;
 
         while (actual != nullptr) {
-            if (actual->getDato().getIdNumerico() == idNumerico) {
+            if (actual->getDato().getIdCompleto() == idCompleto) {
                 resultado = actual->getDato();
                 return true;
             }
@@ -47,11 +50,12 @@ public:
         return false;
     }
 
-    bool eliminarPorId(int idNumerico) {
+    //ELIMINACIÓN
+    bool eliminarPorIdCompleto(const string& idCompleto) {
         if (estaVacia()) return false;
 
-        // eliminar primero
-        if (primero->getDato().getIdNumerico() == idNumerico) {
+        // Caso: eliminar primero
+        if (primero->getDato().getIdCompleto() == idCompleto) {
             NodoSimple<Piloto>* temp = primero;
             primero = primero->getSiguiente();
             delete temp;
@@ -60,7 +64,7 @@ public:
 
         NodoSimple<Piloto>* actual = primero;
         while (actual->getSiguiente() != nullptr) {
-            if (actual->getSiguiente()->getDato().getIdNumerico() == idNumerico) {
+            if (actual->getSiguiente()->getDato().getIdCompleto() == idCompleto) {
                 NodoSimple<Piloto>* temp = actual->getSiguiente();
                 actual->setSiguiente(temp->getSiguiente());
                 delete temp;
@@ -71,6 +75,7 @@ public:
         return false;
     }
 
+    //MOSTRAR
     void mostrar() {
         NodoSimple<Piloto>* actual = primero;
         while (actual != nullptr) {
@@ -81,19 +86,18 @@ public:
         cout << "NULL\n";
     }
 
-    // ================= GRAPHVIZ =================
-    void generarDot(string padre, ofstream& archivo) {
+    //GRAPHVIZ
+    void generarDot(const string& padre, ofstream& archivo) {
         NodoSimple<Piloto>* actual = primero;
-        int i = 0;
-
         string anterior = padre;
+        int contador = 0;
 
         while (actual != nullptr) {
-            int idNodo = actual->getDato().getIdNumerico();
-            string nodo = padre + "_n" + to_string(idNodo);
+            string nodo = padre + "_n" + to_string(contador);
 
             archivo << nodo << " [label=\""
                     << "ID: " << actual->getDato().getIdCompleto() << "\\n"
+                    << "Nombre: " << actual->getDato().getNombre() << "\\n"
                     << "Licencia: " << actual->getDato().getLicencia()
                     << "\"];\n";
 
@@ -101,7 +105,7 @@ public:
 
             anterior = nodo;
             actual = actual->getSiguiente();
-            i++;
+            contador++;
         }
     }
 };

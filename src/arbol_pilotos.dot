@@ -1,0 +1,18 @@
+digraph G {
+labelloc="t";
+label="Arbol de Pilotos";
+node [shape=box, style=rounded];
+n600 [label="ID: P12345678\nNombre: John Doe\nLicencia: PPL\nHoras: 600"];
+n600 -> n99;
+n600 -> n1200;
+n99 [label="ID: p87654321\nNombre: Jane Smith\nLicencia: CPL\nHoras: 99"];
+n99 -> n450;
+n450 [label="ID: Z11111111\nNombre: Maria Lopez\nLicencia: CPL\nHoras: 450"];
+n450 -> n300;
+n300 [label="ID: a22222222\nNombre: Luis Fernandez\nLicencia: PPL\nHoras: 300"];
+n300 -> n150;
+n150 [label="ID: k44444444\nNombre: Kenji Tanaka\nLicencia: CPL\nHoras: 150"];
+n1200 [label="ID: A00000001\nNombre: Carlos Gomez\nLicencia: ATPL\nHoras: 1200"];
+n1200 -> n850;
+n850 [label="ID: M33333333\nNombre: Anna Muller\nLicencia: ATPL\nHoras: 850"];
+}

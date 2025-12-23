@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
 using namespace std;
 
 #include "NodoArbolPiloto.h"
@@ -12,6 +11,7 @@ class ArbolPilotos {
 private:
     NodoArbolPiloto* raiz;
 
+    //inserción
     NodoArbolPiloto* insertarNodo(Piloto p, NodoArbolPiloto* nodo) {
         if (nodo == nullptr) {
             return new NodoArbolPiloto(p);
@@ -30,6 +30,7 @@ private:
         return nodo;
     }
 
+    //recorridos
     void inOrden(NodoArbolPiloto* nodo) {
         if (!nodo) return;
         inOrden(nodo->getIzq());
@@ -54,31 +55,28 @@ private:
              << " (" << nodo->getPiloto().getHorasVuelo() << " hrs)\n";
     }
 
+    //graphviz
     void generarDot(NodoArbolPiloto* nodo, ofstream& archivo) {
         if (!nodo) return;
 
-        // ID interno para Graphviz (numérico y único)
-        int idNodo = nodo->getPiloto().getIdNumerico();
+        int idNodo = nodo->getPiloto().getHorasVuelo();
 
-        // Nodo con información completa
-        archivo << "n" << idNodo << " "
-                << "[label=\""
+        archivo << "n" << idNodo << " [label=\""
                 << "ID: " << nodo->getPiloto().getIdCompleto() << "\\n"
+                << "Nombre: " << nodo->getPiloto().getNombre() << "\\n"
                 << "Licencia: " << nodo->getPiloto().getLicencia() << "\\n"
                 << "Horas: " << nodo->getPiloto().getHorasVuelo()
                 << "\"];\n";
 
-        // Enlace izquierdo
         if (nodo->getIzq()) {
             archivo << "n" << idNodo << " -> n"
-                    << nodo->getIzq()->getPiloto().getIdNumerico()
+                    << nodo->getIzq()->getPiloto().getHorasVuelo()
                     << ";\n";
         }
 
-        // Enlace derecho
         if (nodo->getDer()) {
             archivo << "n" << idNodo << " -> n"
-                    << nodo->getDer()->getPiloto().getIdNumerico()
+                    << nodo->getDer()->getPiloto().getHorasVuelo()
                     << ";\n";
         }
 
@@ -86,16 +84,13 @@ private:
         generarDot(nodo->getDer(), archivo);
     }
 
-    //contar pilots
-    int contarRec(NodoArbolPiloto* nodo) {
-        if (!nodo) return 0;
-        return 1 + contarRec(nodo->getIzq()) + contarRec(nodo->getDer());
-    }
-
-    NodoArbolPiloto* eliminarNodo(NodoArbolPiloto* nodo,
-                              int horas,
-                              bool& eliminado,
-                              Piloto& eliminadoPiloto) {
+    //eliminación
+    NodoArbolPiloto* eliminarNodo(
+        NodoArbolPiloto* nodo,
+        int horas,
+        bool& eliminado,
+        Piloto& eliminadoPiloto
+    ) {
         if (!nodo) return nullptr;
 
         if (horas < nodo->getPiloto().getHorasVuelo()) {
@@ -105,17 +100,16 @@ private:
             nodo->setDer(eliminarNodo(nodo->getDer(), horas, eliminado, eliminadoPiloto));
         }
         else {
-            // Nodo encontrado
             eliminado = true;
             eliminadoPiloto = nodo->getPiloto();
 
-            // Caso 1: hoja
+            //Caso hoja
             if (!nodo->getIzq() && !nodo->getDer()) {
                 delete nodo;
                 return nullptr;
             }
 
-            // Caso 2: un hijo
+            //Un hijo
             if (!nodo->getIzq()) {
                 NodoArbolPiloto* temp = nodo->getDer();
                 delete nodo;
@@ -127,7 +121,7 @@ private:
                 return temp;
             }
 
-            // Caso 3: dos hijos
+            //Dos hijos
             NodoArbolPiloto* mayorIzq = obtenerMayor(nodo->getIzq());
             nodo->setPiloto(mayorIzq->getPiloto());
             nodo->setIzq(eliminarNodo(
@@ -145,6 +139,11 @@ private:
             nodo = nodo->getDer();
         }
         return nodo;
+    }
+
+    int contarRec(NodoArbolPiloto* nodo) {
+        if (!nodo) return 0;
+        return 1 + contarRec(nodo->getIzq()) + contarRec(nodo->getDer());
     }
 
 public:
@@ -184,12 +183,9 @@ public:
 
         ofstream archivo("arbol_pilotos.dot");
 
-        int total = contar();
-
         archivo << "digraph G {\n";
         archivo << "labelloc=\"t\";\n";
-        archivo << "label=\"Arbol de Pilotos (" << total << ")\";\n";
-        archivo << "fontsize=20;\n";
+        archivo << "label=\"Arbol de Pilotos\";\n";
         archivo << "node [shape=box, style=rounded];\n";
 
         generarDot(raiz, archivo);
@@ -201,13 +197,12 @@ public:
         system("start arbol_pilotos.png");
     }
 
-    //dar de baja
+    //Dar de baja por horas
     bool eliminarPorHoras(int horas, Piloto& eliminado) {
         bool eliminadoFlag = false;
         raiz = eliminarNodo(raiz, horas, eliminadoFlag, eliminado);
         return eliminadoFlag;
     }
-
 };
 
 #endif

@@ -150,16 +150,13 @@ int main() {
 
             case 8: {
                 string idCompleto;
-                cout << "Ingrese el ID del piloto a dar de baja (ej. P12345678): ";
+                cout << "Ingrese el ID del piloto a dar de baja (ej. P123456789): ";
                 cin >> idCompleto;
-
-                // Extraer parte numérica (quitamos la primera letra)
-                int idNumerico = stoi(idCompleto.substr(1));
 
                 Piloto p;
 
-                // 1. Buscar en la tabla hash usando ID NUMÉRICO
-                if (!tablaHashPilotos.buscar(idNumerico, p)) {
+                // 1. Buscar en la tabla hash usando ID COMPLETO
+                if (!tablaHashPilotos.buscar(idCompleto, p)) {
                     cout << "Piloto no encontrado\n";
                     break;
                 }
@@ -167,8 +164,8 @@ int main() {
                 // 2. Eliminar del ABB usando HORAS DE VUELO
                 if (arbolPilotos.eliminarPorHoras(p.getHorasVuelo(), p)) {
 
-                    // 3. Eliminar de la tabla hash usando ID NUMÉRICO
-                    tablaHashPilotos.eliminar(idNumerico);
+                    // 3. Eliminar de la tabla hash usando ID COMPLETO
+                    tablaHashPilotos.eliminar(idCompleto);
 
                     cout << "Piloto dado de baja correctamente\n";
                     cout << "ID: " << p.getIdCompleto()
