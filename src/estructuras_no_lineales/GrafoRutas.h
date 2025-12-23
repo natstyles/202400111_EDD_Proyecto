@@ -78,6 +78,92 @@ public:
         }
         return total;
     }
+
+    void dijkstra(string origen, string destino) {
+        int n = contarCiudades();
+        if (n == 0) {
+            cout << "No hay ciudades en el grafo\n";
+            return;
+        }
+
+        // 1. Guardar nombres de ciudades en un arreglo
+        string nombres[n];
+        NodoCiudad* aux = ciudades;
+        for (int i = 0; i < n; i++) {
+            nombres[i] = aux->nombre;
+            aux = aux->sig;
+        }
+
+        int dist[n];
+        bool visitado[n];
+        int previo[n];
+
+        for (int i = 0; i < n; i++) {
+            dist[i] = INT_MAX;
+            visitado[i] = false;
+            previo[i] = -1;
+        }
+
+        int origenIdx = obtenerIndiceCiudad(origen, nombres, n);
+        int destinoIdx = obtenerIndiceCiudad(destino, nombres, n);
+
+        if (origenIdx == -1 || destinoIdx == -1) {
+            cout << "Ciudad origen o destino no encontrada\n";
+            return;
+        }
+
+        dist[origenIdx] = 0;
+
+        // 2. Algoritmo de Dijkstra
+        for (int i = 0; i < n - 1; i++) {
+            int u = -1;
+            int minDist = INT_MAX;
+
+            for (int j = 0; j < n; j++) {
+                if (!visitado[j] && dist[j] < minDist) {
+                    minDist = dist[j];
+                    u = j;
+                }
+            }
+
+            if (u == -1) break;
+            visitado[u] = true;
+
+            NodoCiudad* ciudadActual = buscarCiudad(nombres[u]);
+            NodoRuta* ruta = ciudadActual->adyacentes;
+
+            while (ruta) {
+                int v = obtenerIndiceCiudad(ruta->destino, nombres, n);
+                if (!visitado[v] && dist[u] != INT_MAX &&
+                    dist[u] + ruta->distancia < dist[v]) {
+                    dist[v] = dist[u] + ruta->distancia;
+                    previo[v] = u;
+                    }
+                ruta = ruta->sig;
+            }
+        }
+
+        // 3. Mostrar resultado
+        cout << "Distancia total: " << dist[destinoIdx] << " km\n";
+        cout << "Ruta mas corta: ";
+        imprimirRuta(previo, destinoIdx, nombres);
+        cout << endl;
+    }
+
+    int obtenerIndiceCiudad(string nombre, string ciudades[], int n) {
+        for (int i = 0; i < n; i++) {
+            if (ciudades[i] == nombre)
+                return i;
+        }
+        return -1;
+    }
+
+    void imprimirRuta(int previo[], int idx, string ciudades[]) {
+        if (idx == -1) return;
+        imprimirRuta(previo, previo[idx], ciudades);
+        cout << ciudades[idx] << " ";
+    }
+
 };
 
 #endif

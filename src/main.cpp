@@ -28,7 +28,8 @@ void menu() {
     cout << "8. Dar de baja piloto\n";
     cout << "9. Cargar rutas\n";
     cout << "10. Reporte grafo de rutas\n";
-    cout << "11. Salir\n";
+    cout << "11. Recomendar ruta mas corta (Dijkstra)\n";
+    cout << "12. Salir\n";
     cout << "Seleccione una opcion: ";
 }
 
@@ -178,6 +179,7 @@ int main() {
                 break;
             }
 
+            //RUTAS
             case 9: {
                 if (CargadorRutas::cargar(grafoRutas)) {
                     cout << "Rutas cargadas correctamente.\n";
@@ -193,7 +195,18 @@ int main() {
                 break;
             }
 
-            case 11:
+            case 11: {
+                string origen, destino;
+                cout << "Ciudad origen: ";
+                cin >> origen;
+                cout << "Ciudad destino: ";
+                cin >> destino;
+
+                grafoRutas.dijkstra(origen, destino);
+                break;
+            }
+
+            case 12:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -201,7 +214,7 @@ int main() {
                 cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 11);
+    } while (opcion != 12);
 
     return 0;
 }
