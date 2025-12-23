@@ -97,11 +97,13 @@ public:
         int dist[n];
         bool visitado[n];
         int previo[n];
+        int pesoPrevio[n];
 
         for (int i = 0; i < n; i++) {
             dist[i] = INT_MAX;
             visitado[i] = false;
             previo[i] = -1;
+            pesoPrevio[i] = 0;
         }
 
         int origenIdx = obtenerIndiceCiudad(origen, nombres, n);
@@ -138,15 +140,18 @@ public:
                     dist[u] + ruta->distancia < dist[v]) {
                     dist[v] = dist[u] + ruta->distancia;
                     previo[v] = u;
-                    }
+                    pesoPrevio[v] = ruta->distancia;
+                }
                 ruta = ruta->sig;
             }
         }
 
         // 3. Mostrar resultado
+        cout << "Ruta mas corta:\n";
+        imprimirRutaConPesos(previo, pesoPrevio, destinoIdx, nombres);
+        cout << endl;
+
         cout << "Distancia total: " << dist[destinoIdx] << " km\n";
-        cout << "Ruta mas corta: ";
-        imprimirRuta(previo, destinoIdx, nombres);
         cout << endl;
     }
 
@@ -158,10 +163,21 @@ public:
         return -1;
     }
 
-    void imprimirRuta(int previo[], int idx, string ciudades[]) {
-        if (idx == -1) return;
-        imprimirRuta(previo, previo[idx], ciudades);
-        cout << ciudades[idx] << " ";
+    void imprimirRutaConPesos(
+        int previo[],
+        int pesoPrevio[],
+        int idx,
+        string ciudades[]
+    ) {
+        if (previo[idx] == -1) {
+            cout << ciudades[idx];
+            return;
+        }
+
+        imprimirRutaConPesos(previo, pesoPrevio, previo[idx], ciudades);
+
+        cout << " --" << pesoPrevio[idx] << "--> "
+             << ciudades[idx];
     }
 
 };
