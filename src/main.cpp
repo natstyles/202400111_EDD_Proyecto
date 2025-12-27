@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "cargadores/CargadorCambios.h"
 using namespace std;
 
 //AVIONES
@@ -16,26 +18,30 @@ using namespace std;
 #include "cargadores/CargadorRutas.h"
 GrafoRutas grafoRutas;
 
-// MATRIZ DISPERSA
+//MATRIZ DISPERSA
 #include "estructuras_no_lineales/MatrizDispersa.h"
 MatrizDispersa matriz;
 
-void menu() {
+void menuPrincipal() {
     cout << "\n----- SISTEMA DE GESTION DE AEROPUERTO -----\n";
-    cout << "1. Cargar aviones\n";
-    cout << "2. Cambiar estado de avion\n";
-    cout << "3. Reportes de aviones\n";
-    cout << "4. Cargar pilotos\n";
-    cout << "5. Recorridos de pilotos (ABB)\n";
-    cout << "6. Reporte arbol de pilotos\n";
-    cout << "7. Reporte tabla hash de pilotos\n";
-    cout << "8. Dar de baja piloto\n";
-    cout << "9. Cargar rutas\n";
-    cout << "10. Reporte grafo de rutas\n";
-    cout << "11. Recomendar ruta mas corta (Dijkstra)\n";
-    cout << "12. Asignar vuelo a piloto (matriz dispersa)\n";
-    cout << "13. Reporte matriz dispersa\n";
-    cout << "14. Salir\n";
+    cout << "1. Carga de aviones\n";
+    cout << "2. Carga de pilotos\n";
+    cout << "3. Carga de rutas\n";
+    cout << "4. Carga de movimientos\n";
+    cout << "5. Consulta de horas de vuelo (pilotos)\n";
+    cout << "6. Recomendar ruta\n";
+    cout << "7. Visualizar reportes\n";
+    cout << "8. Salir\n";
+    cout << "Seleccione una opcion: ";
+}
+
+void menuMovimientos() {
+    cout << "\n--- CARGA DE MOVIMIENTOS ---\n";
+    cout << "1. Cambiar estado de avion\n";
+    cout << "2. Dar de baja piloto\n";
+    cout << "3. Asignar vuelo a piloto\n";
+    cout << "4. Carga masiva de movimientos\n";
+    cout << "5. Regresar\n";
     cout << "Seleccione una opcion: ";
 }
 
@@ -45,6 +51,17 @@ void menuPilotos() {
     cout << "2. Inorden\n";
     cout << "3. Postorden\n";
     cout << "4. Regresar\n";
+    cout << "Seleccione una opcion: ";
+}
+
+void menuReportes() {
+    cout << "\n--- REPORTES ---\n";
+    cout << "1. Aviones (Arbol B y Lista)\n";
+    cout << "2. Arbol binario de pilotos\n";
+    cout << "3. Tabla hash de pilotos\n";
+    cout << "4. Grafo de rutas\n";
+    cout << "5. Matriz dispersa\n";
+    cout << "6. Regresar\n";
     cout << "Seleccione una opcion: ";
 }
 
@@ -61,60 +78,51 @@ int main() {
     int opcion;
 
     do {
-        menu();
-
-        if (!(cin >> opcion)) {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            opcion = -1;
-        }
+        menuPrincipal();
+        cin >> opcion;
 
         switch (opcion) {
 
-            //AVIONES
             case 1:
                 cargarAviones("avionesTest2.json", disponibles, mantenimiento);
                 break;
 
-            case 2: {
-                string registro;
-                cout << "Ingrese el numero de registro del avion: ";
-                cin >> registro;
-
-                Avion a;
-                if (disponibles.extraer(registro, a)) {
-                    a.setEstado("Mantenimiento");
-                    mantenimiento.insertar(a);
-                    cout << "Avion enviado a mantenimiento.\n";
-                }
-                else if (mantenimiento.extraerPorRegistro(registro, a)) {
-                    a.setEstado("Disponible");
-                    disponibles.insertar(a);
-                    cout << "Avion enviado a disponibles.\n";
-                }
-                else {
-                    cout << "Avion no encontrado.\n";
-                }
+            case 2:
+                cargarPilotos("pilotos.json", arbolPilotos, tablaHashPilotos);
+                cout << "Pilotos cargados correctamente.\n";
                 break;
-            }
 
             case 3:
-                disponibles.generarReporte(
-                    "aviones_disponibles",
-                    "Arbol B - Aviones Disponibles"
-                );
-                mantenimiento.generarReporte(
-                    "aviones_mantenimiento",
-                    "Lista Circular - Aviones en Mantenimiento"
-                );
-                cout << "Reportes de aviones generados.\n";
+                if (CargadorRutas::cargar(grafoRutas))
+                    cout << "Rutas cargadas correctamente.\n";
+                else
+                    cout << "Error al cargar rutas.\n";
                 break;
 
-            //PILOTOS
-            case 4:
-                cargarPilotos("pilotos.json", arbolPilotos, tablaHashPilotos);
-                cout << "Pilotos cargados en ABB y Tabla Hash.\n";
+            case 4: {
+                int opMov;
+                do {
+                    menuMovimientos();
+                    cin >> opMov;
+
+                    switch (opMov) {
+
+                        case 4:
+                            CargadorCambios::cargarMovimientos(
+                                "movimientosTest2.txt",
+                                disponibles,
+                                mantenimiento,
+                                arbolPilotos,
+                                tablaHashPilotos,
+                                grafoRutas,
+                                matriz
+                            );
+                            break;
+                    }
+
+                } while (opMov != 5);
                 break;
+            }
 
             case 5: {
                 int op;
@@ -124,138 +132,58 @@ int main() {
 
                     switch (op) {
                         case 1:
-                            cout << "\n--- PREORDEN ---\n";
                             arbolPilotos.mostrarPreOrden();
                             break;
                         case 2:
-                            cout << "\n--- INORDEN ---\n";
                             arbolPilotos.mostrarInOrden();
                             break;
                         case 3:
-                            cout << "\n--- POSTORDEN ---\n";
                             arbolPilotos.mostrarPostOrden();
                             break;
-                        case 4:
-                            break;
-                        default:
-                            cout << "Opcion invalida\n";
                     }
                 } while (op != 4);
                 break;
             }
 
-            case 6:
-                arbolPilotos.generarReporte();
-                cout << "Reporte del arbol de pilotos generado.\n";
-                break;
-
-            case 7:
-                tablaHashPilotos.generarReporte("tabla_hash_pilotos");
-                cout << "Reporte de tabla hash generado.\n";
-                break;
-
-            case 8: {
-                string idCompleto;
-                cout << "Ingrese el ID del piloto a dar de baja (ej. P12345678): ";
-                cin >> idCompleto;
-
-                Piloto p;
-
-                // 1. Buscar en la tabla hash
-                if (!tablaHashPilotos.buscar(idCompleto, p)) {
-                    cout << "Piloto no encontrado\n";
-                    break;
-                }
-
-                // 2. Eliminar del ABB (por horas)
-                if (arbolPilotos.eliminarPorHoras(p.getHorasVuelo(), p)) {
-
-                    // 3. Eliminar de la tabla hash
-                    tablaHashPilotos.eliminar(idCompleto);
-
-                    // 4. Eliminar de la matriz dispersa
-                    matriz.eliminarPiloto(idCompleto);
-
-                    cout << "Piloto dado de baja correctamente\n";
-                    cout << "ID: " << p.getIdCompleto()
-                         << " | Nombre: " << p.getNombre() << endl;
-                } else {
-                    cout << "Error al eliminar del arbol\n";
-                }
-                break;
-            }
-
-            //RUTAS
-            case 9: {
-                if (CargadorRutas::cargar(grafoRutas)) {
-                    cout << "Rutas cargadas correctamente.\n";
-                } else {
-                    cout << "Error al cargar rutas.\n";
-                }
-                break;
-            }
-
-            case 10: {
-                grafoRutas.generarReporte("grafo_rutas", "Grafo de Rutas");
-                cout << "Reporte de rutas generado.\n";
-                break;
-            }
-
-            case 11: {
+            case 6: {
                 string origen, destino;
                 cout << "Ciudad origen: ";
                 cin >> origen;
                 cout << "Ciudad destino: ";
                 cin >> destino;
-
                 grafoRutas.dijkstra(origen, destino);
                 break;
             }
 
-            case 12: {
-                string pilotoId, ciudad, vuelo;
+            case 7: {
+                int opRep;
+                do {
+                    menuReportes();
+                    cin >> opRep;
 
-                cout << "Ingrese ID del piloto: ";
-                cin >> pilotoId;
-
-                Piloto p;
-                if (!tablaHashPilotos.buscar(pilotoId, p)) {
-                    cout << "El piloto no existe.\n";
-                    break;
-                }
-
-                cout << "Ingrese ciudad destino: ";
-                cin >> ciudad;
-
-                if (!grafoRutas.existeCiudad(ciudad)) {
-                    cout << "La ciudad no existe en el grafo de rutas.\n";
-                    break;
-                }
-
-                cout << "Ingrese vuelo (registro del avion): ";
-                cin >> vuelo;
-
-                Avion a;
-                if (!disponibles.buscar(vuelo, a) &&
-                    !mantenimiento.buscarPorRegistro(vuelo, a)) {
-
-                    cout << "El vuelo no existe en aviones disponibles ni en mantenimiento.\n";
-                    break;
+                    switch (opRep) {
+                        case 1:
+                            disponibles.generarReporte("aviones_disponibles", "Arbol B - Aviones");
+                            mantenimiento.generarReporte("aviones_mantenimiento", "Lista - Mantenimiento");
+                            break;
+                        case 2:
+                            arbolPilotos.generarReporte();
+                            break;
+                        case 3:
+                            tablaHashPilotos.generarReporte("tabla_hash_pilotos");
+                            break;
+                        case 4:
+                            grafoRutas.generarReporte("grafo_rutas", "Grafo de rutas");
+                            break;
+                        case 5:
+                            matriz.generarReporte("matriz_dispersa");
+                            break;
                     }
-
-                //pasa todas las validaciones
-                matriz.insertar(pilotoId, ciudad, vuelo);
-
-                cout << "Vuelo asignado correctamente en la matriz dispersa.\n";
+                } while (opRep != 6);
                 break;
             }
 
-            case 13: {
-                matriz.generarReporte("matriz_dispersa");
-                break;
-            }
-
-            case 14:
+            case 8:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -263,7 +191,7 @@ int main() {
                 cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 14);
+    } while (opcion != 8);
 
     return 0;
 }

@@ -5,93 +5,104 @@
 #include <string>
 #include <iostream>
 
+#include "../estructuras/ListaCircularAviones.h"
+#include "../estructuras_no_lineales/ArbolBAviones.h"
+#include "../estructuras_no_lineales/ArbolPilotos.h"
+#include "../estructuras_no_lineales/TablaHashPilotos.h"
+#include "../estructuras_no_lineales/GrafoRutas.h"
+#include "../estructuras_no_lineales/MatrizDispersa.h"
+
 using namespace std;
 
-void procesarCambios(string ruta,
-                      ColaPasajeros &cola,
-                      ListaDoblePasajeros &lista,
-                      PilaEquipaje &pila,
-                      ListaCircularAviones &disponibles,
-                      ListaCircularAviones &mantenimiento) {
+class CargadorCambios {
+public:
+    static void cargarMovimientos(
+        const string& rutaArchivo,
+        ArbolBAviones& disponibles,
+        ListaCircularAviones& mantenimiento,
+        ArbolPilotos& arbolPilotos,
+        TablaHashPilotos& tablaHashPilotos,
+        GrafoRutas& grafoRutas,
+        MatrizDispersa& matriz
+    ) {
 
-    ifstream archivo(ruta);
+        ifstream archivo(rutaArchivo);
+        if (!archivo.is_open()) {
+            cout << "No se pudo abrir el archivo de movimientos.\n";
+            return;
+        }
 
-    if (!archivo.is_open()) {
-        cout << "Error: No se pudo abrir el archivo: " << ruta << endl;
-        return;
-    }
+        string linea;
+        while (getline(archivo, linea)) {
 
-    string linea;
-    int contadorPasajeros = 0;
-    int contadorAviones = 0;
+            //CAMBIO DE ESTADO
+            //MantenimientoAviones(Estado,Registro)
+            if (linea.find("MantenimientoAviones") != string::npos) {
 
-    while (getline(archivo, linea)) {
+                int p1 = linea.find("(");
+                int p2 = linea.find(",");
+                int p3 = linea.find(")");
 
-        //equipajes
-        if (linea.find("IngresoEquipajes") != string::npos) {
+                string estado = linea.substr(p1 + 1, p2 - p1 - 1);
+                string registro = linea.substr(p2 + 1, p3 - p2 - 1);
 
-            if (!cola.estaVacia()) {
-                Pasajero p = cola.desencolar();
-                lista.insertarOrdenado(p);
+                Avion a;
 
-                if (p.getEquipaje() > 0)
-                    pila.push(p.getPasaporte(), p.getEquipaje());
+                if (estado == "Mantenimiento" && disponibles.extraer(registro, a)) {
+                    a.setEstado("Mantenimiento");
+                    mantenimiento.insertar(a);
+                }
+                else if (estado == "Disponible" && mantenimiento.extraerPorRegistro(registro, a)) {
+                    a.setEstado("Disponible");
+                    disponibles.insertar(a);
+                }
+            }
 
-                contadorPasajeros++;
+            //DAR DE BAJA PILOTO
+            //DarDeBaja(P12345678)
+            else if (linea.find("DarDeBaja") != string::npos) {
+
+                int p1 = linea.find("(");
+                int p2 = linea.find(")");
+
+                string id = linea.substr(p1 + 1, p2 - p1 - 1);
+
+                Piloto p;
+                if (tablaHashPilotos.buscar(id, p)) {
+                    arbolPilotos.eliminarPorHoras(p.getHorasVuelo(), p);
+                    tablaHashPilotos.eliminar(id);
+                    matriz.eliminarPiloto(id);
+                }
+            }
+
+            //ASIGNAR VUELOS
+            //AsignarVuelo(Piloto,Ciudad,Vuelo)
+            else if (linea.find("AsignarVuelo") != string::npos) {
+
+                int p1 = linea.find("(");
+                int p2 = linea.find(",");
+                int p3 = linea.find(",", p2 + 1);
+                int p4 = linea.find(")");
+
+                string pilotoId = linea.substr(p1 + 1, p2 - p1 - 1);
+                string ciudad   = linea.substr(p2 + 1, p3 - p2 - 1);
+                string vuelo    = linea.substr(p3 + 1, p4 - p3 - 1);
+
+                Piloto p;
+                Avion a;
+
+                if (tablaHashPilotos.buscar(pilotoId, p) &&
+                    grafoRutas.existeCiudad(ciudad) &&
+                    (disponibles.buscar(vuelo, a) || mantenimiento.buscarPorRegistro(vuelo, a))) {
+
+                    matriz.insertar(pilotoId, ciudad, vuelo);
+                }
             }
         }
 
-        //movimiento de estado de los aviones FIXED
-        else if (linea.find("MantenimientoAviones") != string::npos) {
-
-            //MantenimientoAviones,Ingreso,N12345;
-            string comando, accion, registro;
-
-            size_t p1 = linea.find(",");
-            size_t p2 = linea.find(",", p1 + 1);
-
-            if (p1 != string::npos && p2 != string::npos) {
-                comando = linea.substr(0, p1);
-                accion = linea.substr(p1 + 1, p2 - p1 - 1);
-                registro = linea.substr(p2 + 1);
-
-                //quitar el ;
-                if (!registro.empty() && registro.back() == ';')
-                    registro.pop_back();
-
-                if (accion == "Ingreso") {
-                    if (disponibles.buscarYEnviarAMantenimiento(registro, mantenimiento)) {
-                        contadorAviones++;
-                    } else {
-                        cout << "Avion no encontrado en disponibles: "
-                             << registro << endl;
-                    }
-                }
-
-                else if (accion == "Salida") {
-                    if (mantenimiento.buscarYEnviarADisponibles(registro, disponibles)) {
-                        contadorAviones++;
-                    } else {
-                        cout << "Avion no encontrado en mantenimiento: "
-                             << registro << endl;
-                    }
-                }
-            }
-        }
+        archivo.close();
+        cout << "Carga masiva de movimientos finalizada correctamente.\n";
     }
-
-    archivo.close();
-
-    cout << "\nMovimientos procesados:\n";
-    cout << "- Pasajeros atendidos: " << contadorPasajeros << endl;
-    cout << "- Cambios de aviones: " << contadorAviones << endl;
-
-    //reportes
-    cout << "\n--- PASAJEROS ATENDIDOS ---\n";
-    lista.mostrar();
-
-    cout << "\n--- PILA DE EQUIPAJE ---\n";
-    pila.mostrar();
-}
+};
 
 #endif
