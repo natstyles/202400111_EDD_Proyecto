@@ -16,6 +16,10 @@ using namespace std;
 #include "cargadores/CargadorRutas.h"
 GrafoRutas grafoRutas;
 
+// MATRIZ DISPERSA
+#include "estructuras_no_lineales/MatrizDispersa.h"
+MatrizDispersa matriz;
+
 void menu() {
     cout << "\n----- SISTEMA DE GESTION DE AEROPUERTO -----\n";
     cout << "1. Cargar aviones\n";
@@ -29,7 +33,9 @@ void menu() {
     cout << "9. Cargar rutas\n";
     cout << "10. Reporte grafo de rutas\n";
     cout << "11. Recomendar ruta mas corta (Dijkstra)\n";
-    cout << "12. Salir\n";
+    cout << "12. Asignar vuelo a piloto (matriz dispersa)\n";
+    cout << "13. Reporte matriz dispersa\n";
+    cout << "14. Salir\n";
     cout << "Seleccione una opcion: ";
 }
 
@@ -150,22 +156,25 @@ int main() {
 
             case 8: {
                 string idCompleto;
-                cout << "Ingrese el ID del piloto a dar de baja (ej. P123456789): ";
+                cout << "Ingrese el ID del piloto a dar de baja (ej. P12345678): ";
                 cin >> idCompleto;
 
                 Piloto p;
 
-                // 1. Buscar en la tabla hash usando ID COMPLETO
+                // 1. Buscar en la tabla hash
                 if (!tablaHashPilotos.buscar(idCompleto, p)) {
                     cout << "Piloto no encontrado\n";
                     break;
                 }
 
-                // 2. Eliminar del ABB usando HORAS DE VUELO
+                // 2. Eliminar del ABB (por horas)
                 if (arbolPilotos.eliminarPorHoras(p.getHorasVuelo(), p)) {
 
-                    // 3. Eliminar de la tabla hash usando ID COMPLETO
+                    // 3. Eliminar de la tabla hash
                     tablaHashPilotos.eliminar(idCompleto);
+
+                    // 4. Eliminar de la matriz dispersa
+                    matriz.eliminarPiloto(idCompleto);
 
                     cout << "Piloto dado de baja correctamente\n";
                     cout << "ID: " << p.getIdCompleto()
@@ -203,7 +212,50 @@ int main() {
                 break;
             }
 
-            case 12:
+            case 12: {
+                string pilotoId, ciudad, vuelo;
+
+                cout << "Ingrese ID del piloto: ";
+                cin >> pilotoId;
+
+                Piloto p;
+                if (!tablaHashPilotos.buscar(pilotoId, p)) {
+                    cout << "El piloto no existe.\n";
+                    break;
+                }
+
+                cout << "Ingrese ciudad destino: ";
+                cin >> ciudad;
+
+                if (!grafoRutas.existeCiudad(ciudad)) {
+                    cout << "La ciudad no existe en el grafo de rutas.\n";
+                    break;
+                }
+
+                cout << "Ingrese vuelo (registro del avion): ";
+                cin >> vuelo;
+
+                Avion a;
+                if (!disponibles.buscar(vuelo, a) &&
+                    !mantenimiento.buscarPorRegistro(vuelo, a)) {
+
+                    cout << "El vuelo no existe en aviones disponibles ni en mantenimiento.\n";
+                    break;
+                    }
+
+                //pasa todas las validaciones
+                matriz.insertar(pilotoId, ciudad, vuelo);
+
+                cout << "Vuelo asignado correctamente en la matriz dispersa.\n";
+                break;
+            }
+
+            case 13: {
+                matriz.generarReporte("matriz_dispersa");
+                break;
+            }
+
+            case 14:
                 cout << "Saliendo del sistema...\n";
                 break;
 
@@ -211,7 +263,7 @@ int main() {
                 cout << "Opcion invalida.\n";
         }
 
-    } while (opcion != 12);
+    } while (opcion != 14);
 
     return 0;
 }

@@ -28,4 +28,7 @@ add_executable(202400111_EDD_Proyecto src/main.cpp
         src/estructuras_no_lineales/NodoRuta.h
         src/estructuras_no_lineales/NodoCiudad.h
         src/estructuras_no_lineales/GrafoRutas.h
-        src/cargadores/CargadorRutas.h)
+        src/cargadores/CargadorRutas.h
+        src/estructuras_no_lineales/NodoEncabezado.h
+        src/estructuras_no_lineales/NodoMatriz.h
+        src/estructuras_no_lineales/MatrizDispersa.h)

@@ -2,9 +2,9 @@ digraph G {
 labelloc="t";
 label="Arbol de Pilotos";
 node [shape=box, style=rounded];
-n600 [label="ID: P12345678\nNombre: John Doe\nLicencia: PPL\nHoras: 600"];
-n600 -> n99;
-n600 -> n1200;
+n520 [label="ID: R77777777\nNombre: Laura Rossi\nLicencia: CPL\nHoras: 520"];
+n520 -> n99;
+n520 -> n1200;
 n99 [label="ID: p87654321\nNombre: Jane Smith\nLicencia: CPL\nHoras: 99"];
 n99 -> n450;
 n450 [label="ID: Z11111111\nNombre: Maria Lopez\nLicencia: CPL\nHoras: 450"];

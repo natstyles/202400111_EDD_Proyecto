@@ -180,6 +180,17 @@ public:
              << ciudades[idx];
     }
 
+    //corroboramos que exista una ciudad para el momento de la matriz disperza
+    bool existeCiudad(const string& nombre) {
+        NodoCiudad* actual = ciudades;
+        while (actual) {
+            if (actual->nombre == nombre)
+                return true;
+            actual = actual->sig;
+        }
+        return false;
+    }
+
 };
 
 #endif

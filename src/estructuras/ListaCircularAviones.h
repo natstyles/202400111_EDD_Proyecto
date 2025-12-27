@@ -218,6 +218,22 @@ public:
         return false;
     }
 
+    //buscar por registro
+    bool buscarPorRegistro(string registro, Avion& resultado) {
+        if (estaVacia()) return false;
+
+        NodoDoble<Avion>* actual = primero;
+
+        do {
+            if (actual->getDato().getRegistro() == registro) {
+                resultado = actual->getDato(); // COPIA
+                return true;
+            }
+            actual = actual->getSiguiente();
+        } while (actual != primero);
+
+        return false;
+    }
 };
 
 #endif

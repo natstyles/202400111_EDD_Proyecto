@@ -1,0 +1,16 @@
+digraph MatrizDispersa {
+node [shape=box, style=filled, fillcolor=white];
+graph [ranksep=0.5, nodesep=0.5];
+labelloc="t";
+label="Matriz Dispersa: Piloto - Ciudad - Vuelo";
+root [label="Vuelo/Ciudad destino", group="0"];
+C_Madrid [label="Ciudad: Madrid", group="Madrid"];
+F_N50003 [label="Vuelo: N50003", group="0"];
+N_N50003_Madrid [label="Piloto: A00000001", group="Madrid"];
+{ rank=same; root; C_Madrid; }
+{ rank=same; F_N50003; N_N50003_Madrid; }
+root -> C_Madrid;
+root -> F_N50003;
+C_Madrid -> N_N50003_Madrid [dir=both];
+F_N50003 -> N_N50003_Madrid [dir=both, constraint=false];
+}

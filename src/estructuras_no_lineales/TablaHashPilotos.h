@@ -14,10 +14,6 @@ private:
     int tamTabla;
     ListaSimplePilotos* tabla;
 
-    int funcionHash(int idNumerico) {
-        return idNumerico % tamTabla;
-    }
-
 public:
     TablaHashPilotos() {
         tamTabla = 19;
