@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 #include "NodoArbolPiloto.h"
@@ -59,25 +60,26 @@ private:
     void generarDot(NodoArbolPiloto* nodo, ofstream& archivo) {
         if (!nodo) return;
 
-        int idNodo = nodo->getPiloto().getHorasVuelo();
+        int h = altura(nodo); // ALTURA del subárbol (como antes)
 
-        archivo << "n" << idNodo << " [label=\""
+        archivo << "node" << nodo << " [label=\""
+                << h << "\\n"
                 << "ID: " << nodo->getPiloto().getIdCompleto() << "\\n"
-                << "Nombre: " << nodo->getPiloto().getNombre() << "\\n"
-                << "Licencia: " << nodo->getPiloto().getLicencia() << "\\n"
                 << "Horas: " << nodo->getPiloto().getHorasVuelo()
                 << "\"];\n";
 
+        // Hijo izquierdo (<)
         if (nodo->getIzq()) {
-            archivo << "n" << idNodo << " -> n"
-                    << nodo->getIzq()->getPiloto().getHorasVuelo()
-                    << ";\n";
+            archivo << "node" << nodo
+                    << " -> node" << nodo->getIzq()
+                    << " [label=\"<\"];\n";
         }
 
+        // Hijo derecho (>)
         if (nodo->getDer()) {
-            archivo << "n" << idNodo << " -> n"
-                    << nodo->getDer()->getPiloto().getHorasVuelo()
-                    << ";\n";
+            archivo << "node" << nodo
+                    << " -> node" << nodo->getDer()
+                    << " [label=\">\"];\n";
         }
 
         generarDot(nodo->getIzq(), archivo);
@@ -175,6 +177,41 @@ public:
         return contarRec(raiz);
     }
 
+    //altura de arbol
+    int altura(NodoArbolPiloto* nodo) {
+        if (!nodo) return 0;
+        return 1 + max(altura(nodo->getIzq()), altura(nodo->getDer()));
+    }
+
+    void recolectarNivel(NodoArbolPiloto* nodo, int nivel, int actual,
+                     vector<NodoArbolPiloto*>& lista) {
+        if (!nodo) return;
+
+        if (nivel == actual) {
+            lista.push_back(nodo);
+            return;
+        }
+
+        recolectarNivel(nodo->getIzq(), nivel, actual + 1, lista);
+        recolectarNivel(nodo->getDer(), nivel, actual + 1, lista);
+    }
+
+    void generarRanks(ofstream& archivo) {
+        int h = altura(raiz);
+
+        for (int i = 1; i <= h; i++) {
+            vector<NodoArbolPiloto*> nivel;
+            recolectarNivel(raiz, i, 1, nivel);
+
+            if (!nivel.empty()) {
+                archivo << "{ rank=same; ";
+                for (auto n : nivel)
+                    archivo << "node" << n << "; ";
+                archivo << "}\n";
+            }
+        }
+    }
+
     void generarReporte() {
         if (estaVacio()) {
             cout << "Arbol de pilotos vacio\n";
@@ -183,12 +220,26 @@ public:
 
         ofstream archivo("arbol_pilotos.dot");
 
-        archivo << "digraph G {\n";
+        archivo << "digraph Pilotos {\n";
         archivo << "labelloc=\"t\";\n";
-        archivo << "label=\"Arbol de Pilotos\";\n";
-        archivo << "node [shape=box, style=rounded];\n";
+        archivo << "label=\"Arbol Binario de Busqueda - Pilotos\";\n";
+        archivo << "fontsize=20;\n";
+
+        // Estilo tipo libro
+        archivo << "node [\n";
+        archivo << "  shape=circle,\n";
+        archivo << "  style=filled,\n";
+        archivo << "  fillcolor=\"#d9f2d9\",\n";
+        archivo << "  color=\"#4CAF50\",\n";
+        archivo << "  fontcolor=\"#2e7d32\",\n";
+        archivo << "  fontsize=10,\n";
+        archivo << "  width=1.1\n";
+        archivo << "];\n";
+
+        archivo << "edge [color=\"#4CAF50\", arrowsize=0.7];\n";
 
         generarDot(raiz, archivo);
+        generarRanks(archivo);
 
         archivo << "}\n";
         archivo.close();

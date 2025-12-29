@@ -100,21 +100,24 @@ private:
 
         archivo << "node" << nodo << " [label=\"";
 
-        for (int i = 0; i < nodo->cuenta; i++) {
-            archivo << "Registro: " << nodo->claves[i].getRegistro()
-                    << "\\nVuelo: " << nodo->claves[i].getVuelo()
-                    << "\\nEstado: " << nodo->claves[i].getEstado();
+        // Puerto inicial
+        archivo << "<f0>";
 
-            if (i < nodo->cuenta - 1)
-                archivo << " | ";
+        for (int i = 0; i < nodo->cuenta; i++) {
+            archivo << " | "
+                    << "Registro: " << nodo->claves[i].getRegistro()
+                    << "\\nVuelo: " << nodo->claves[i].getVuelo()
+                    << "\\nEstado: " << nodo->claves[i].getEstado()
+                    << " | <f" << (i + 1) << ">";
         }
 
         archivo << "\"];\n";
 
+        // Conectar hijos usando puertos
         if (!nodo->hoja) {
             for (int i = 0; i <= nodo->cuenta; i++) {
                 if (nodo->hijos[i]) {
-                    archivo << "node" << nodo
+                    archivo << "node" << nodo << ":f" << i
                             << " -> node" << nodo->hijos[i] << ";\n";
                     generarDot(nodo->hijos[i], archivo);
                 }
