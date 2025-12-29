@@ -86,16 +86,16 @@ public:
 
                 string pilotoId = linea.substr(p1 + 1, p2 - p1 - 1);
                 string ciudad   = linea.substr(p2 + 1, p3 - p2 - 1);
-                string vuelo    = linea.substr(p3 + 1, p4 - p3 - 1);
+                string registro = linea.substr(p3 + 1, p4 - p3 - 1);
 
                 Piloto p;
                 Avion a;
 
                 if (tablaHashPilotos.buscar(pilotoId, p) &&
                     grafoRutas.existeCiudad(ciudad) &&
-                    (disponibles.buscar(vuelo, a) || mantenimiento.buscarPorRegistro(vuelo, a))) {
+                    (disponibles.buscar(registro, a) || mantenimiento.buscarPorRegistro(registro, a))) {
 
-                    matriz.insertar(pilotoId, ciudad, vuelo);
+                    matriz.insertar(pilotoId, ciudad, a.getVuelo());
                 }
             }
         }
