@@ -118,7 +118,78 @@ int main() {
 
                     switch (opMov) {
 
-                        case 4:
+                        // =================== CAMBIAR ESTADO AVIÓN ===================
+                        case 1: {
+                            string registro;
+                            cout << "Numero de registro del avion: ";
+                            cin >> registro;
+
+                            Avion avion;
+
+                            //disponible a mantenimiento
+                            if (disponibles.extraer(registro, avion)) {
+                                avion.setEstado("Mantenimiento");
+                                mantenimiento.insertar(avion);
+                                cout << "Avion cambiado a Mantenimiento.\n";
+                            }
+                            //si no está en disponible, entonces de mantenimiento a disponible
+                            else if (mantenimiento.extraerPorRegistro(registro, avion)) {
+                                avion.setEstado("Disponible");
+                                disponibles.insertar(avion);
+                                cout << "Avion cambiado a Disponible.\n";
+                            }
+                            else {
+                                cout << "Avion no encontrado en el sistema.\n";
+                            }
+
+                            break;
+                        }
+
+                        // =================== DAR DE BAJA PILOTO ===================
+                        case 2: {
+                            string id;
+                            cout << "ID del piloto: ";
+                            cin >> id;
+
+                            Piloto piloto;
+
+                            // 1. Buscar piloto en hash
+                            if (!tablaHashPilotos.buscar(id, piloto)) {
+                                cout << "Piloto no encontrado.\n";
+                                break;
+                            }
+
+                            // 2. Eliminar del árbol por HORAS
+                            Piloto eliminado;
+                            arbolPilotos.eliminarPorHoras(piloto.getHorasVuelo(), eliminado);
+
+                            // 3. Eliminar de tabla hash
+                            tablaHashPilotos.eliminar(id);
+
+                            // 4. Eliminar de matriz dispersa
+                            matriz.eliminarPiloto(id);
+
+                            cout << "Piloto dado de baja correctamente.\n";
+                            break;
+                        }
+
+                        // =================== ASIGNAR VUELO A PILOTO ===================
+                        case 3: {
+                            string idPiloto, vuelo, ciudad;
+                            cout << "ID del piloto: ";
+                            cin >> idPiloto;
+                            cout << "Vuelo: ";
+                            cin >> vuelo;
+                            cout << "Ciudad destino: ";
+                            cin >> ciudad;
+
+                            matriz.insertar(idPiloto, ciudad, vuelo);
+                            cout << "Vuelo asignado correctamente.\n";
+                            break;
+                        }
+
+                        // =================== CARGA MASIVA ===================
+                        case 4: {
                             CargadorCambios::cargarMovimientos(
                                 "movimientos.txt",
                                 disponibles,
@@ -128,7 +199,15 @@ int main() {
                                 grafoRutas,
                                 matriz
                             );
+                            cout << "Carga masiva finalizada.\n";
                             break;
+                        }
+
+                        case 5:
+                            break;
+
+                        default:
+                            cout << "Opcion invalida.\n";
                     }
 
                 } while (opMov != 5);
