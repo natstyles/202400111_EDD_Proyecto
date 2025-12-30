@@ -1,4 +1,8 @@
 #include <iostream>
+#include <clocale>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #include "cargadores/CargadorCambios.h"
 using namespace std;
@@ -67,6 +71,13 @@ void menuReportes() {
 
 int main() {
 
+    setlocale(LC_ALL, "");
+
+    #ifdef _WIN32
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
+    #endif
+
     //AVIONES
     ArbolBAviones disponibles;
     ListaCircularAviones mantenimiento;
@@ -84,7 +95,7 @@ int main() {
         switch (opcion) {
 
             case 1:
-                cargarAviones("avionesTest2.json", disponibles, mantenimiento);
+                cargarAviones("aviones.json", disponibles, mantenimiento);
                 break;
 
             case 2:
@@ -109,7 +120,7 @@ int main() {
 
                         case 4:
                             CargadorCambios::cargarMovimientos(
-                                "movimientosTest2.txt",
+                                "movimientos.txt",
                                 disponibles,
                                 mantenimiento,
                                 arbolPilotos,

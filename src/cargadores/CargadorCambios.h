@@ -35,31 +35,39 @@ public:
         string linea;
         while (getline(archivo, linea)) {
 
-            //CAMBIO DE ESTADO
-            //MantenimientoAviones(Estado,Registro)
             if (linea.find("MantenimientoAviones") != string::npos) {
 
-                int p1 = linea.find("(");
-                int p2 = linea.find(",");
-                int p3 = linea.find(")");
+                //Quitar el punto y coma final
+                if (!linea.empty() && linea.back() == ';') {
+                    linea.pop_back();
+                }
 
-                string estado = linea.substr(p1 + 1, p2 - p1 - 1);
-                string registro = linea.substr(p2 + 1, p3 - p2 - 1);
+                //Separar por comas
+                size_t p1 = linea.find(",");
+                size_t p2 = linea.find(",", p1 + 1);
+
+                string accion   = linea.substr(p1 + 1, p2 - p1 - 1);
+                string registro = linea.substr(p2 + 1);
 
                 Avion a;
 
-                if (estado == "Mantenimiento" && disponibles.extraer(registro, a)) {
-                    a.setEstado("Mantenimiento");
-                    mantenimiento.insertar(a);
+                //Ingreso → Disponible → Mantenimiento
+                if (accion == "Ingreso") {
+                    if (disponibles.extraer(registro, a)) {
+                        a.setEstado("Mantenimiento");
+                        mantenimiento.insertar(a);
+                    }
                 }
-                else if (estado == "Disponible" && mantenimiento.extraerPorRegistro(registro, a)) {
-                    a.setEstado("Disponible");
-                    disponibles.insertar(a);
+                //Salida → Mantenimiento → Disponible
+                else if (accion == "Salida") {
+                    if (mantenimiento.extraerPorRegistro(registro, a)) {
+                        a.setEstado("Disponible");
+                        disponibles.insertar(a);
+                    }
                 }
             }
 
-            //DAR DE BAJA PILOTO
-            //DarDeBaja(P12345678)
+            //Dar de baja
             else if (linea.find("DarDeBaja") != string::npos) {
 
                 int p1 = linea.find("(");
@@ -75,8 +83,7 @@ public:
                 }
             }
 
-            //ASIGNAR VUELOS
-            //AsignarVuelo(Piloto,Ciudad,Vuelo)
+            //Asignar Vuelos
             else if (linea.find("AsignarVuelo") != string::npos) {
 
                 int p1 = linea.find("(");
