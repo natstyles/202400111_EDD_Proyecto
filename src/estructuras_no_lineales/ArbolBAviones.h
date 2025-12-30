@@ -83,11 +83,13 @@ private:
 
             i++;
 
-            if (nodo->hijos[i] && nodo->hijos[i]->cuenta == 4) {
+            if (nodo->hijos[i]->cuenta == 4) {
                 dividirHijo(nodo, i, nodo->hijos[i]);
 
-                if (avion.getRegistro() > nodo->claves[i].getRegistro())
+                //decidir a qué hijo bajar después del split
+                if (avion.getRegistro() > nodo->claves[i].getRegistro()) {
                     i++;
+                }
             }
 
             insertarNoLleno(nodo->hijos[i], avion);
@@ -200,6 +202,7 @@ public:
             return;
         }
 
+        // SIEMPRE proteger la raíz
         if (raiz->cuenta == 4) {
             NodoBAvion* nuevaRaiz = new NodoBAvion(false);
             nuevaRaiz->hijos[0] = raiz;
